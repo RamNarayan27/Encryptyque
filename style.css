@@ -1,0 +1,31 @@
+.main-heading{
+    font-size: 35px;
+    margin-top: 100px;
+    margin-bottom: 25px;
+}
+.rest-wid{
+    max-width: max-content;
+}
+.center-div{
+    margin: 0 auto;
+    width: 25%;
+}
+.login-btn{
+    margin-bottom: 20px;
+    margin-top: 20px;
+    color: chocolate !important;
+    background-color: cyan !important;
+    border-color: darkgreen !important;
+}
+.sign-up{
+    margin-top: 25px;
+}
+body{
+    overflow-x: hidden;
+    background-color: pink;
+}
+.oauth-icons{
+    max-width: 50px;
+    max-height: 50px;
+    margin-top: 20px;
+}
