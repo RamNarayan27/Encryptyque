@@ -1,0 +1,19 @@
+.main-heading{
+    font-size: 35px;
+    margin-top: 80px;
+    margin-bottom: 25px;
+}
+.center-div{
+    margin: 0 auto;
+    width: 25%;
+}
+.login-btn{
+    margin-bottom: 20px;
+    margin-top: 20px;
+    color: chocolate !important;
+    background-color: cyan !important;
+    border-color: darkgreen !important;
+}
+body{
+    background-color: pink;
+}
