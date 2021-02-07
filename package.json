@@ -20,5 +20,11 @@
   "homepage": "https://github.com/vishalvignesh/CNProject#readme",
   "devDependencies": {
     "electron": "^11.2.2"
+  },
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.4.1",
+    "aws-sdk": "^2.839.0",
+    "bcrypt": "^5.0.0",
+    "data-store": "^4.0.3"
   }
 }

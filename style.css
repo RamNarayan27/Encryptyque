@@ -22,7 +22,8 @@
 }
 body{
     overflow-x: hidden;
-    background-color: pink;
+    background-color: grey;
+    color:black;
 }
 .oauth-icons{
     max-width: 50px;

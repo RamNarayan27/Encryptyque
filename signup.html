@@ -9,41 +9,46 @@
     <title>signup page</title>
 </head>
 <body>
+    <a href="index.html">Back</a>
     <div class="container-fluid">
         <div class="row justify-content-center main-heading">
 			Sign Up
 		</div>
-        <form>
-            <div class="mb-3 center-div">
-                <label for="Fullname" class="form-label">Full Name</label>
-                <input type="text" id="Fullname" class="form-control">
+        <!--Name-->
+        <div class="mb-3 center-div">
+            <label for="Fullname" class="form-label">Full Name</label>
+            <input type="text" id="fullName" class="form-control">
+        </div>
+        <!-- Unique User Name -->
+        <div class="mb-3 center-div">
+            <label for="UniqueUser" class="form-label">Unique User Name</label>
+            <input type="text" id="uniqueUser" class="form-control">
+        </div>
+        <!-- Password -->
+        <div class="mb-3 center-div">
+            <label for="Password" class="form-label">Password</label>
+            <input type="password" id="password" class="form-control">
+        </div>
+        <!-- Confirm Password -->
+        <div class="mb-3 center-div">
+            <label for="ConfirmPassword" class="form-label">Confirm Password</label>
+            <input type="password" id="confirmPassword" class="form-control">
+        </div>
+        <!-- Email -->
+        <div class="mb-3 center-div">
+            <label for="Email" class="form-label">Email</label>
+            <input type="email" id="email" class="form-control">
+        </div>
+        <!-- Phone Number -->
+        <div class="mb-3 center-div">
+            <label for="Phone" class="form-label">Phone Number</label>
+            <input type="number" id="phone" class="form-control">
+        </div>
+        <div class="text-center">
+            <button class="btn btn-primary login-btn" onclick="checkAndWrite()">
+                Sign Up
             </div>
-            <div class="mb-3 center-div">
-                <label for="UniqueUser" class="form-label">Unique User Name</label>
-                <input type="text" id="UniqueUser" class="form-control">
-            </div>
-            <div class="mb-3 center-div">
-                <label for="Password" class="form-label">Password</label>
-                <input type="password" class="form-control">
-            </div>
-            <div class="mb-3 center-div">
-                <label for="ConfirmPassword" class="form-label">Confirm Password</label>
-                <input type="password" class="form-control">
-            </div>
-            <div class="mb-3 center-div">
-                <label for="Email" class="form-label">Email</label>
-                <input type="email" id="Email" class="form-control">
-            </div>
-            <div class="mb-3 center-div">
-                <label for="Phone" class="form-label">Phone Number</label>
-                <input type="number" id="Phone" class="form-control">
-            </div>
-            <div class="text-center">
-                <button type="submit" class="btn btn-primary login-btn">
-                    Sign Up
-                </div>
-            </div>
-        </form>
+        </div>
     </div>
     <script src="signup.js"></script>
 	<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW" crossorigin="anonymous"></script>
