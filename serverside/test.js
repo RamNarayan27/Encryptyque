@@ -1,30 +1,61 @@
 const NodeRSA = require("node-rsa");
 const axios = require("axios");
 const { parse, stringify } = require("flatted");
+const bcrypt = require('bcrypt')
 const server_public_key =
   "\n-----BEGIN PUBLIC KEY-----\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI/Ip/FSDW2ZQfUSfbrFJrVx95crrvUg\n5pi8GEZ5Z1Ahw3UwQlcqQqPlC0FKDcWSvDk1Md7wpk5/PpkxVH6AAK0CAwEAAQ==\n-----END PUBLIC KEY-----\n";
 const server_pubkey = NodeRSA(server_public_key, "pkcs8-public-pem");
 
-let fname = "aish";
-let uname = "test1dff22323";
-let pass = "mypass";
-let em = "aish@gmail.com";
-let ph = "+919500182212";
+//SIGNUP AND SIGNIN PAGE CLIENT SIDE
+/*
+
+x = bcrypt.hash('testpass', 10, function (err, hash) {
+  user_details = {
+    fullName: "aish",
+    userName: 'aishuname',
+    password: 'testpass',
+    email: "aish@gmail.com",
+    phone: "19500182212"
+  };
+
+  temps = stringify(user_details);
+  let temp_encrypted = server_pubkey.encrypt(temps);
+  let hexEnc = Buffer.from(temp_encrypted).toString('hex');
+  console.log(user_details)
+  url = 'http://localhost:5000/api/generaluserlogin/' + hexEnc;
+  
+  console.log(url)
+  function axiosTest() {
+    return axios.get(url).then(response => response.data)
+  }
+  
+  console.log(axiosTest().then(function (data) {
+    console.log(data)
+}))})
+
+*/
+
 
 user_details = {
-  fullName: fname,
-  userName: uname,
-  password: pass,
-  email: em,
-  phone: ph,
-};  
+  //fullName: "aish",
+  userName: 'test122323',
+  OTP: '907950'
+  //password: 'testpass',
+  //email: "aish@gmail.com",
+  //phone: "19500182212"
+};
 
 temps = stringify(user_details);
 let temp_encrypted = server_pubkey.encrypt(temps);
 let hexEnc = Buffer.from(temp_encrypted).toString('hex');
-console.log(hexEnc);
-url = 'http://localhost:5000/api/generaluserlogin/' + hexEnc;
+console.log(user_details)
+url = 'http://localhost:5000/api/generaluserverify/' + hexEnc + '/0';
 
-const res = axios.get(url);
+console.log(url)
+function axiosTest() {
+  return axios.get(url).then(response => response.data)
+}
 
-console.log(res.data);
+console.log(axiosTest().then(function (data) {
+  console.log(data)
+}))

@@ -1,5 +1,5 @@
 const AWS = require("aws-sdk");
-const bcyprt = require("bcrypt");
+const bcrypt = require("bcrypt");
 const express = require("express");
 const NodeRSA = require("node-rsa");
 const { randomInt } = require("crypto");
@@ -44,7 +44,7 @@ app.get("/api/generalusersignup/:data", (req, res) => {
   finalData["OTP"] = Math.floor(100000 + Math.random() * 900000);
   sendSMS(
     finalData.phone,
-    `Your One Time Password is ${finalData["OTP"]}`,
+    `Your One Time Password is ${finalData["OTP"]}. Do not Share it with anyone.`,
     (err, result) => {
       console.log("RESULTS: ", err, result);
     }
@@ -67,8 +67,6 @@ app.get("/api/generalusersignup/:data", (req, res) => {
 /**login
  * ! requires db read
  */
-
-let testArr = { name: "ram", email: "ram@gmail.com" };
 app.get("/api/generaluserlogin/:data", (req, res) => {
   let prepData = Buffer.from(req.params.data, "hex");
   let decryptedData = priv_key.decrypt(prepData); //type is buffer
@@ -77,15 +75,15 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
   params = {
     TableName: table,
     Key: {
-      username: finalData[userName]
+      userName: finalData['userName']
     },
   };
   docClient.get(params, (err,data) => {
       if(err) {
-          res.send("Invalid Credentials");
+          res.send("Invalid Credentials1");
       } else {
-          if(finalData.userName == data.userName){
-              bcrypt.compare(finalData.password,data.password,(err, result) => {
+          if(finalData.userName == data.Item.userName){
+              bcrypt.compare(finalData.password,data.Item.password,(err, result) => {
                 if(result) {
                     //create IAM user and send access code and secret key
                     var iam = new AWS.IAM();
@@ -93,42 +91,54 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
                         UserName: finalData.userName,
                       };
                       iam.createUser(params, function (err, data) {
-                        if (err) res.send("User Creation Error");
-                        // an error occurred
-                     // successful response
+                        if (err) console.log("User Creation Error");
                       });
                       
                       iam.createAccessKey(params, function (err, data) {
-                        if (err) res.send("Access Key Creation Error");
-                        // an error occurred
-                        else res.send(data); // successful response
+                        if (err){
+                          console.log('Error in Access Key Creation')
+                        } 
+                        else {
+                          temps = stringify(data);
+                          let temp_encrypted = priv_key.encryptPrivate(temps);
+                          let hexEnc = Buffer.from(temp_encrypted).toString('hex');
+                          res.send(temp)
+                        }
                       });
                       
                       params["GroupName"] = "CNBasicUser";
                       iam.addUserToGroup(params, function (err, data) {
-                        if (err) res.send("Adding to grp error");
-                        // an error occurred
-                        
+                        if (err) console.log("Adding to Group Adding");
                       });
                       
                 } else {
-                    res.send("Invalid Credentials");
+                    res.send("Invalid Credentials2");
+                    console.log(`BYE : ${finalData.password} vs ${data.Item.password}`)
+                    res.send(err)
                 }
               });
+          }
+          else{
+            console.log(`HELLO : ${finalData.userName} vs ${data.Item.userName}`)
+            console.log(data)
+            res.send('Incorrect Username')
           }
       }
   })
 });
 
-/**password verify */
-app.get("/api/generaluserverify/:username/:otp/:resendvalue", (req, res) => {
-  let otp = req.params.otp;
-  let username = req.params.username;
+/**OTP Verification + Reset*/
+app.get("/api/generaluserverify/:data/:resendvalue", (req, res) => {
+  let prepData = Buffer.from(req.params.data, "hex");
+  let decryptedData = priv_key.decrypt(prepData); //type is buffer
+  let formattedData = decryptedData.toString();
+  let finalData = parse(formattedData); 
   let resendvalue = req.params.resendvalue;
+
   params = {
     TableName: table,
     Key: {
-      username: username,
+      userName: finalData.userName,
     },
   };
 
@@ -137,26 +147,26 @@ app.get("/api/generaluserverify/:username/:otp/:resendvalue", (req, res) => {
       res.send("Ensure that you have signed up");
     } else {
       if (resendvalue == 1) {
-        data.Item.OTP = randomInt(6);
         params = {
           TableName: table,
           Key: {
-            userName: uname,
+            userName: data.Item.userName,
           },
           UpdateExpression: "set OTP = :r",
           ExpressionAttributeValues: {
-            ":r": randomInt(6),
+            ":r": Math.floor(100000 + Math.random() * 900000),
           },
-          ReturnValues: "UPDATED_OTP",
+          ReturnValues: "UPDATED_NEW",
         };
         docClient.update(params, (err, udata) => {
           if (err) {
-            res.send("Resend otp error");
+            console.log(err)
+            res.send("Reset otp error");
           } else {
-            res.send("Resend successs");
+            res.send("Reset successs");
             sendSMS(
-              data.phone,
-              `Your One Time Password is ${udata.Attributes.OTP}`,
+              data.Item.phone,
+              `Your One Time Password is ${udata.Attributes.OTP}. Do not Share it with anyone.`,
               (err, result) => {
                 console.log("RESULTS: ", err, result);
               }
@@ -164,7 +174,7 @@ app.get("/api/generaluserverify/:username/:otp/:resendvalue", (req, res) => {
           }
         });
       } else {
-        if (data.Item.OTP == otp) {
+        if (data.Item.OTP == finalData.OTP) {
           res.send("DONE");
         } else {
           res.send("Invalid OTP");
