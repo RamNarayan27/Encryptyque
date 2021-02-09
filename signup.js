@@ -1,14 +1,14 @@
-const AWS = require("aws-sdk");
 const bcrypt = require("bcrypt");
+const Alert = require("electron-alert");
 const saltRounds = 10;
 
-AWS.config.update({
-    region: "ap-south-1"
-});
-
-let docClient = new AWS.DynamoDB.DocumentClient();
-
 let table = "user_details";
+
+/* TODO Change the entire code to send this data to the private server */
+/* TODO Send the data to the server, display the dialog for the pin, after receiveing the pin send this punk to the dashboard*/
+/̶*̶ T̶O̶D̶O̶ P̶a̶s̶s̶w̶o̶r̶d̶ m̶i̶s̶m̶a̶t̶c̶h̶ c̶h̶e̶c̶k̶ *̶/̶ 
+/* TODO Email verification for Gmail only */
+/* TODO use electron alert to the proper places accordingly */
 
 function checkAndWrite() {
     let fullName = document.getElementById("fullName");
@@ -17,60 +17,11 @@ function checkAndWrite() {
     let confirmPassword = document.getElementById("confirmPassword");
     let email = document.getElementById("email");
     let phone = document.getElementById("phone");
-    var tableparams = {
-        TableName: table,
-        Key: {
-            "userName": uniqueUserName.value
-        }
-    };
-    docClient.get(tableparams, (err, data) => {
-        if (Object.keys(data).length == 0) {
-            if (String(password.value) == String(confirmPassword.value)) {
-                bcrypt.hash(password.value, saltRounds).then(function (hash) {
-                    writeToDynamoDB(String(fullName.value), String(uniqueUserName.value), String(hash), String(email.value), String(phone.value));
-                    fullName.value = "";
-                    uniqueUserName.value = "";
-                    password.value = "";
-                    confirmPassword.value = "";
-                    email.value = "";
-                    phone.value = "";
-                })
-            }
-            else {
-                /* TODO Custom Alert for Password Mismatch*/
-            }
-        }
-        else {
-            /* TODO Custom Alert for Username already exists */
-        }
-    });
-}
-
-function writeToDynamoDB(fullname, uniqueUserName, hash, email, phone) {
-    let params = {
-        TableName: table,
-        Item: {
-            "userName": uniqueUserName,
-            "email": email,
-            "info": {
-                "phone-number": phone,
-                "name": fullname,
-                "password": hash
-            }
-        }
-    };
-
-    /* TODO Start Loading screen */
-    docClient.put(params, function (err, data) {
-        if (err) {
-            /* TODO Fatal Error Alert*/
-        } else {
-            alert("added to db");
-            /* TODO Close loading screen */
-            window.location.href = "mainwindow.html";
-        }
-    });
-}
-
-/* TODO Function for Loading Screen */
-/* TODO Custom Alert Box */
+    if(password.value == confirmPassword.value)
+    {
+        
+    }
+    else{
+        //alert for password mismatch
+    }
+}    
