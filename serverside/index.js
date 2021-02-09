@@ -30,9 +30,7 @@ function sendSMS(to_number, message, cb) {
   );
 }
 
-/**sign up
- * TODO DONE
- */
+/**sign up */
 app.get("/api/generalusersignup/:data", (req, res) => {
   /**
    * * receive and decrypt
@@ -64,9 +62,7 @@ app.get("/api/generalusersignup/:data", (req, res) => {
   res.send("DONE");
 });
 
-/**login
- * ! requires db read
- */
+/**login*/
 app.get("/api/generaluserlogin/:data", (req, res) => {
   let prepData = Buffer.from(req.params.data, "hex");
   let decryptedData = priv_key.decrypt(prepData); //type is buffer
@@ -75,64 +71,67 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
   params = {
     TableName: table,
     Key: {
-      userName: finalData['userName']
+      userName: finalData["userName"],
     },
   };
-  docClient.get(params, (err,data) => {
-      if(err) {
-          res.send("Invalid Credentials1");
-      } else {
-          if(finalData.userName == data.Item.userName){
-              bcrypt.compare(finalData.password,data.Item.password,(err, result) => {
-                if(result) {
-                    //create IAM user and send access code and secret key
-                    var iam = new AWS.IAM();
-                    var params = {
-                        UserName: finalData.userName,
-                      };
-                      iam.createUser(params, function (err, data) {
-                        if (err) console.log("User Creation Error");
-                      });
-                      
-                      iam.createAccessKey(params, function (err, data) {
-                        if (err){
-                          console.log('Error in Access Key Creation')
-                        } 
-                        else {
-                          temps = stringify(data);
-                          let temp_encrypted = priv_key.encryptPrivate(temps);
-                          let hexEnc = Buffer.from(temp_encrypted).toString('hex');
-                          res.send(temp)
-                        }
-                      });
-                      
-                      params["GroupName"] = "CNBasicUser";
-                      iam.addUserToGroup(params, function (err, data) {
-                        if (err) console.log("Adding to Group Adding");
-                      });
-                      
+  docClient.get(params, (err, data) => {
+    if (err || data.Item.OTPVerified == "false") {
+      res.send("Invalid Credentials1");
+    } else {
+      if (finalData.userName == data.Item.userName) {
+        bcrypt.compare(
+          finalData.password,
+          data.Item.password,
+          (err, result) => {
+            if (result) {
+              //create IAM user and send access code and secret key
+              var iam = new AWS.IAM();
+              var params = {
+                UserName: finalData.userName,
+              };
+              iam.createUser(params, function (err, data) {
+                if (err) console.log("User Creation Error");
+              });
+
+              iam.createAccessKey(params, function (err, data) {
+                if (err) {
+                  console.log("Error in Access Key Creation");
                 } else {
-                    res.send("Invalid Credentials2");
-                    console.log(`BYE : ${finalData.password} vs ${data.Item.password}`)
-                    res.send(err)
+                  temps = stringify(data);
+                  let temp_encrypted = priv_key.encryptPrivate(temps);
+                  let hexEnc = Buffer.from(temp_encrypted).toString("hex");
+                  res.send(hexEnc);
                 }
               });
+
+              params["GroupName"] = "CNBasicUser";
+              iam.addUserToGroup(params, function (err, data) {
+                if (err) console.log("Adding to Group Adding");
+              });
+            } else {
+              res.send("Invalid Credentials2");
+              console.log(
+                `BYE : ${finalData.password} vs ${data.Item.password}`
+              );
+              //res.send(err)
+            }
           }
-          else{
-            console.log(`HELLO : ${finalData.userName} vs ${data.Item.userName}`)
-            console.log(data)
-            res.send('Incorrect Username')
-          }
+        );
+      } else {
+        console.log(`HELLO : ${finalData.userName} vs ${data.Item.userName}`);
+        console.log(data);
+        res.send("Incorrect Username");
       }
-  })
+    }
+  });
 });
 
-/**OTP Verification + Reset*/
+/**OTP Verification + Reset */
 app.get("/api/generaluserverify/:data/:resendvalue", (req, res) => {
   let prepData = Buffer.from(req.params.data, "hex");
   let decryptedData = priv_key.decrypt(prepData); //type is buffer
   let formattedData = decryptedData.toString();
-  let finalData = parse(formattedData); 
+  let finalData = parse(formattedData);
   let resendvalue = req.params.resendvalue;
 
   params = {
@@ -160,7 +159,7 @@ app.get("/api/generaluserverify/:data/:resendvalue", (req, res) => {
         };
         docClient.update(params, (err, udata) => {
           if (err) {
-            console.log(err)
+            console.log(err);
             res.send("Reset otp error");
           } else {
             res.send("Reset successs");
@@ -176,7 +175,27 @@ app.get("/api/generaluserverify/:data/:resendvalue", (req, res) => {
       } else {
         if (data.Item.OTP == finalData.OTP) {
           res.send("DONE");
+
+          params = {
+            TableName: table,
+            Key: {
+              userName: data.Item.userName,
+            },
+            UpdateExpression: "set OTPVerified = :r",
+            ExpressionAttributeValues: {
+              ":r":'true'
+            },
+            ReturnValues: "UPDATED_NEW",
+          };
+          docClient.update(params, (err, udata) => {
+            if (err) {
+              console.log("OTPVerified status update failed");
+            } else {
+              console.log("OTPVerified Status updated");
+            }
+          });
         } else {
+          console.log(data.Item.OTP, " vs ", finalData.OTP);
           res.send("Invalid OTP");
         }
       }

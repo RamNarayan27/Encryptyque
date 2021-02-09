@@ -24,7 +24,10 @@
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.4.1",
     "aws-sdk": "^2.839.0",
+    "axios": "^0.21.1",
     "bcrypt": "^5.0.0",
-    "data-store": "^4.0.3"
+    "data-store": "^4.0.3",
+    "flatted": "^3.1.1",
+    "node-rsa": "^1.1.1"
   }
 }
