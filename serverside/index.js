@@ -50,12 +50,14 @@ app.get("/api/generalusersignup/:data", (req, res) => {
     },
   };
   docClient.get(params, (err, data) => {
+    console.log('db get data',data);
+    console.log('db get error',err);
     if(err){
       sendSMS(
         finalData.phone,
         `Your One Time Password is ${finalData["OTP"]}. Do not Share it with anyone.`,
         (err, result) => {
-          console.log("RESULTS: ", err, result);
+          console.log("RESULTS: err, data, ", err, result);
         }
       );
       /**Enter DB write code here */
@@ -65,7 +67,7 @@ app.get("/api/generalusersignup/:data", (req, res) => {
       };
       docClient.put(tableparams, function (err, data) {
         if (err) {
-          console.log("error", err);
+          console.log("db put error", err);
         } else {
           console.log("added to db", data);
         }

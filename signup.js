@@ -7,6 +7,9 @@ const dataStore = require("data-store")({
 });
 const https = require('https')
 
+process.env.NODE_TLS_REJECT_UNAUTHORIZED = '0';
+
+
 /**
  * TODO Set Alerts based on the messages
  */
@@ -44,7 +47,7 @@ function checkAndWrite() {
       let stringUserDetails = stringify(user_details);
       let encryptedDetails = server_pubkey.encrypt(stringUserDetails);
       let hexEnc = Buffer.from(encryptedDetails).toString("hex");
-      url = "https://3.131.252.234:8443/api/generalusersignup/" + hexEnc;
+      url = "http://3.131.252.234:5500/api/generalusersignup/" + hexEnc;
       let response = axiosTest().then(function (data) {
         switch (data) {
           case "UserExists": 
@@ -55,6 +58,7 @@ function checkAndWrite() {
           case "DONE":
             //redirect to otpverify.html
             window.location.href = "otpverify.html";
+            break;
           default:
             console.log(data);
         }
