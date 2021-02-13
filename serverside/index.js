@@ -40,26 +40,40 @@ app.get("/api/generalusersignup/:data", (req, res) => {
   let formattedData = decryptedData.toString();
   let finalData = parse(formattedData);
   finalData["OTP"] = Math.floor(100000 + Math.random() * 900000);
-  sendSMS(
-    finalData.phone,
-    `Your One Time Password is ${finalData["OTP"]}. Do not Share it with anyone.`,
-    (err, result) => {
-      console.log("RESULTS: ", err, result);
-    }
-  );
-  /**Enter DB write code here */
-  let tableparams = {
+  //Code to check if the username already exists
+  params = {
     TableName: table,
-    Item: finalData,
+    Key: {
+      userName: finalData["userName"],
+    },
   };
-  docClient.put(tableparams, function (err, data) {
-    if (err) {
-      console.log("error", err);
-    } else {
-      console.log("added to db", data);
+  docClient.get(params, (err, data) => {
+    if(err){
+      sendSMS(
+        finalData.phone,
+        `Your One Time Password is ${finalData["OTP"]}. Do not Share it with anyone.`,
+        (err, result) => {
+          console.log("RESULTS: ", err, result);
+        }
+      );
+      /**Enter DB write code here */
+      let tableparams = {
+        TableName: table,
+        Item: finalData,
+      };
+      docClient.put(tableparams, function (err, data) {
+        if (err) {
+          console.log("error", err);
+        } else {
+          console.log("added to db", data);
+        }
+      });
+      res.send("DONE");
     }
-  });
-  res.send("DONE");
+    else{
+      res.send("UserExists")
+    }
+  })
 });
 
 /**login*/
