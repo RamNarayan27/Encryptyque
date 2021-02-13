@@ -3,7 +3,8 @@ const bcrypt = require("bcrypt");
 const express = require("express");
 const NodeRSA = require("node-rsa");
 const { randomInt } = require("crypto");
-const https = requre('https');
+const https = require('https');
+const fs = require('fs')
 const app = express();
 const { parse, stringify } = require("flatted");
 const { send } = require("process");
@@ -220,7 +221,7 @@ app.get("/api/generaluserverify/:data/:resendvalue", (req, res) => {
 
 
 var privateKey  = fs.readFileSync('cert/server.key', 'utf8');
-var certificate = fs.readFileSync('cert/server.crt', 'utf8');
+var certificate = fs.readFileSync('cert/server.cert', 'utf8');
 var credentials = {key: privateKey, cert: certificate};
 
 var httpsServer = https.createServer(credentials, app);
