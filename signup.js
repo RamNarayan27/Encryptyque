@@ -5,10 +5,17 @@ const { parse, stringify } = require("flatted");
 const dataStore = require("data-store")({
   path: process.cwd() + "/conf.json",
 });
+const https = require('https')
+
 /**
- * TODO Encrypt and send the data to the api endpoint
  * TODO Set Alerts based on the messages
  */
+
+const instance = axios.create({
+  httpsAgent: new https.Agent({  
+    rejectUnauthorized: false
+  })
+});
 
 const server_public_key =
   "\n-----BEGIN PUBLIC KEY-----\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI/Ip/FSDW2ZQfUSfbrFJrVx95crrvUg\n5pi8GEZ5Z1Ahw3UwQlcqQqPlC0FKDcWSvDk1Md7wpk5/PpkxVH6AAK0CAwEAAQ==\n-----END PUBLIC KEY-----\n";
@@ -37,7 +44,7 @@ function checkAndWrite() {
       let stringUserDetails = stringify(user_details);
       let encryptedDetails = server_pubkey.encrypt(stringUserDetails);
       let hexEnc = Buffer.from(encryptedDetails).toString("hex");
-      url = "http://localhost:5000/api/generalusersignup/" + hexEnc;
+      url = "https://3.131.252.234:8443/api/generalusersignup/" + hexEnc;
       let response = axiosTest().then(function (data) {
         switch (data) {
           case "UserExists": 
@@ -58,5 +65,5 @@ function checkAndWrite() {
   }
 }
 function axiosTest() {
-  return axios.get(url).then((response) => response.data);
+  return instance.get(url).then((response) => response.data);
 }

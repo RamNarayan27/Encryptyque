@@ -16,6 +16,12 @@ let resendvalue = 0;
  * @params to send are resend value, otp, userName
  */
 
+const instance = axios.create({
+  httpsAgent: new https.Agent({  
+    rejectUnauthorized: false
+  })
+});
+
 const server_public_key =
   "\n-----BEGIN PUBLIC KEY-----\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI/Ip/FSDW2ZQfUSfbrFJrVx95crrvUg\n5pi8GEZ5Z1Ahw3UwQlcqQqPlC0FKDcWSvDk1Md7wpk5/PpkxVH6AAK0CAwEAAQ==\n-----END PUBLIC KEY-----\n";
 const server_pubkey = NodeRSA(server_public_key, "pkcs8-public-pem");
@@ -47,7 +53,7 @@ function otpVerify() {
   let encryptedDetails = server_pubkey.encrypt(stringUserDetails);
   let hexEnc = Buffer.from(encryptedDetails).toString("hex");
   url =
-    "http://localhost:5000/api/generaluserverify/" +
+    "https://3.131.252.234:8443/api/generaluserverify/" +
     hexEnc +
     "/" +
     String(resendvalue);
@@ -85,5 +91,5 @@ function otpVerify() {
 }
 
 function axiosTest() {
-  return axios.get(url).then((response) => response.data);
+  return instance.get(url).then((response) => response.data);
 }
