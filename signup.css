@@ -1,4 +1,4 @@
-.main-heading{
+/*.main-heading{
     font-size: 35px;
     margin-top: 80px;
     margin-bottom: 25px;
@@ -13,7 +13,14 @@
     color: chocolate !important;
     background-color: cyan !important;
     border-color: darkgreen !important;
-}
+}*/
 body{
-    background-color: pink;
+    background-image: url('background.png');
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+.splfont{
+    font-family: OCR;
 }

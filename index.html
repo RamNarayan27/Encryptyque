@@ -1,43 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <title>Login Page</title>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet"
-        integrity="sha384-giJF6kkoqNQ00vy+HMDP7azOuL0xtbfIcaT9wjKHr8RbDVddVHyTfAAsrekwKmP1" crossorigin="anonymous">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="signup.css">
+    <link rel="stylesheet" href="signupbulma.css">
     <link rel="stylesheet" href="style.css">
+    <title>Encryptyque</title>
 </head>
-
 <body>
-    <div class="container-fluid login-box">
-        <div class="row justify-content-center main-heading">
-            Login
+    <section class="section"></section>
+    <section class="section">
+        <div class="container">
+            <nav class="level">
+                <div class="level-left">
+                    <div class="level-item">
+                        <img src="logogogogo.png" class="image" alt="Encryptyque logo">
+                    </div>
+                </div>
+                <div class="level-right">
+                    <div class="level-item">
+                        <div class="box">
+                            <h1 class="title is-1 has-text-centered has-text-primary-dark">LOG IN</h1>
+                            <br>
+                            <div class="field">
+                                <label class="label ">Username:</label>
+                                <input type="text" id="username"class="input" placeholder="Username">
+                            </div>
+                            <div class="field">
+                                <label class="label">Password:</label>
+                                <input type="password" id="password" class="input" placeholder="Password">
+                            </div>
+                            <div class="field">
+                                <div class="has-text-centered">
+                                    <button class="button is-primary is-rounded" onclick="readAndValidate()">Login</button>
+                                </div>
+                            </div>
+                            
+                            <div class="has-text-centered has-text-primary-dark">New here? <a href="signup.html" class="has-text-primary-dark"><u>Click here</u></a> to signup</div>
+                        </div>
+                    </div>
+                </div>
+            </nav>
         </div>
-        <div class="mb-3 center-div">
-            <label for="Username" class="form-label">Username</label>
-            <input type="text" id="username" class="form-control">
-        </div>
-        <div class="mb-3 center-div">
-            <label for="Password" class="form-label">Password</label>
-            <input type="password" id="password" class="form-control">
-        </div>
-        <div class="text-center">
-            <button class="btn btn-primary login-btn" onclick="readAndValidate()    ">
-                Sign In
-        </div>
-    </div>
-    <div class="row">
-        <div class="text-center sign-up">
-            Not a member? <a href="signup.html">Sign up now</a>
-        </div>
-    </div>
-    </div>
+    </section>
     <script src="login.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-ygbV9kiqUc6oa4msXn9868pTtWMgiQaeYH7/t7LECLbyPA2x65Kgf80OJFdroafW"
-        crossorigin="anonymous"></script>
 </body>
-
 </html>
