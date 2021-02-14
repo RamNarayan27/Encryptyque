@@ -61,22 +61,24 @@ function otpVerify() {
   let response = axiosTest().then(function (data) {
     console.log(data);
     switch (data) {
-      case "Ensure that you have signed up":
+      case "INVALID USERNAME/PASSWORD":
+        //This error cannot happen unless server side ussue : just alert invalid username/password
         //TODO Alert message
         //redirect to signup page
         window.location.href = "signup.html";
         break;
-      case "Reset OTP Error":
+      case "ERROR: UNABLE TO RESET OTP":
         //TODO Alert message
+        //this happens normally cas of a server side issue..just alert to try again or contact helpdesk (dont forget to enable the two buttons)
         //update error, try again or sth //TODO Check
         break;
-      case "Reset successs":
+      case "SUCCESS: OTP RESET":
         //TODO Alert message
         //enable verify button again
         document.getElementById("verify-btn").disabled = false;
         resendvalue = 0;
         break;
-      case "Invalid OTP":
+      case "ERROR: OTP MISMATCH`":
         //TODO Alert message
         //we might have to enable the buttons again or find another way to deal with this
         // we can ask him to click on resend otp
@@ -84,7 +86,7 @@ function otpVerify() {
         document.getElementById("verify-btn").disabled = false;
         document.getElementById("resend-btn").disabled = false;
         break;
-      case "DONE":
+      case "SUCCESS: OTP VERIFIED":
         window.location.href = "index.html";
         break;
     }
