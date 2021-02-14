@@ -124,14 +124,17 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
                 UserName: finalData.userName,
               };
               iam.createUser(params, function (err, data) {
-                if(err) console.log("Log: Possible UserCreation Error");
+                if(err){
+                  console.log("Log: Possible UserCreation Error");
+                } 
               });
 
-              iam.createAccessKey(params, function (err, data) {
+              iam.createAccessKey(params, function (err, udata) {
                 if (err) {
                   console.log("Log: Possible AccessKey Creation Error");
                 } else {
-                    temps = stringify(data);
+                    udata['fullname'] = data.Item.fullName
+                    temps = stringify(udata);
                     let temp_encrypted = priv_key.encryptPrivate(temps);
                     let hexEnc = Buffer.from(temp_encrypted).toString("hex");
                     console.log('Log: Successfully sent AccessCodes')
@@ -141,7 +144,9 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
 
               params["GroupName"] = "CNBasicUser";
               iam.addUserToGroup(params, function (err, data) {
-                if (err) console.log("Log: Possible Error in Adding User to Group");
+                if (err){
+                  console.log("Log: Possible Error in Adding User to Group");
+                } 
               });
             } else {
               res.send("ERROR: INVALID USERNAME/PASSWORD");

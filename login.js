@@ -39,17 +39,17 @@ function readAndValidate() {
   url = "https://3.131.252.234:8443/api/generaluserlogin/" + hexEnc;
   let response = axiosTest().then(function (data) {
     switch (data) {
-      case "Invalid Credentials1":
-        //TODO Alert
+      case 'ERROR: INVALID USERNAME/PASSWORD':
+        //show invalid username/password alert
         break;
-      case "Invalid Credentials2":
-        //TODO Alert
-        break;
+
       default:
         dataStore.set('unique-username',userName.value);
+        dataStore.set('fullname',data['fullname'])
         dataStore.set('creds',data);
         //redirect to mainwindow.html
         window.location.href = "mainwindow.html";
+        break;
     }
   });
 }

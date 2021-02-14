@@ -50,12 +50,12 @@ function checkAndWrite() {
       url = "http://3.131.252.234:5500/api/generalusersignup/" + hexEnc;
       let response = axiosTest().then(function (data) {
         switch (data) {
-          case "UserExists": 
+          case "ERROR: USER EXISTS": 
             //alert userexists
             console.log('User Exists')
             break;
 
-          case "DONE":
+          case "SUCCESS: USER CREATION":
             //redirect to otpverify.html
             window.location.href = "otpverify.html";
             break;
