@@ -4,6 +4,7 @@ const { parse, stringify } = require("flatted");
 const dataStore = require("data-store")({
   path: process.cwd() + "/creds.json",
 });
+const Swal = require('sweetalert2')
 const https = require("https");
 
 
@@ -38,18 +39,42 @@ function readAndValidate() {
   let encryptedDetails = server_pubkey.encrypt(stringUserDetails);
   let hexEnc = Buffer.from(encryptedDetails).toString("hex");
   url = "https://3.131.252.234:8443/api/generaluserlogin/" + hexEnc;
+  Swal.fire({
+    icon: 'info',
+    title: '<p style="color:#FFF";>Please Wait</p>',
+    width: '350',
+    html: '<p style="color:#FFF";>Please wait while we try to log you in</p>',
+    background: '#000000',
+    allowOutsideClick: false,
+    showConfirmButton: false
+  })
   let response = axiosTest().then(function (data) {
     switch (data) {
       case 'ERROR: INVALID USERNAME/PASSWORD':
-        //show invalid username/password alert
+        Swal.fire({
+          icon: 'error',
+          title: '<p style="color:#FFF";>Invalid Username/Password</p>',
+          width: '350',
+          html: '<p style="color:#FFF";>Please check the username/password</p>',
+          background: '#000000'
+        })
         break;
 
       default:
-        dataStore.set('unique-username',userName.value);
-        dataStore.set('fullname',data['fullname'])
-        dataStore.set('creds',data);
-        //redirect to mainwindow.html
-        window.location.href = "mainwindow.html";
+        Swal.fire({
+          icon: 'success',
+          title: '<p style="color:#FFF";>Success</p>',
+          width: '350',
+          html: '<p style="color:#FFF";>Successfully logged in, Setting up your credentials</p>',
+          background: '#000000'
+        }).then((result) =>{
+          dataStore.set('unique-username',userName.value);
+          dataStore.set('fullname',data['fullname'])
+          dataStore.set('creds',data);
+          //redirect to mainwindow.html
+          window.location.href = "mainwindow.html";        
+        })
+        
         break;
     }
   });

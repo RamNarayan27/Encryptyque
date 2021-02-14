@@ -5,6 +5,8 @@ const dataStore = require("data-store")({
   path: process.cwd() + "/conf.json",
 });
 const https = require("https");
+const Swal = require('sweetalert2')
+
 let resendvalue = 0;
 /**
  * TODO Send the otp entered by the user to the api endpoint
@@ -58,16 +60,47 @@ function otpVerify() {
     hexEnc +
     "/" +
     String(resendvalue);
+    if (resendvalue == 1) text_to_display='<p style="color:#FFF";>Please wait while we resend your OTP</p>'
+    else text_to_display='<p style="color:#FFF";>Please wait while we check your OTP</p>'
+    Swal.fire({
+      icon: 'info',
+      title: '<p style="color:#FFF";>Please Wait</p>',
+      width: '350',
+      html: text_to_display,
+      background: '#000000',
+      allowOutsideClick: false,
+      showConfirmButton: false
+    })
+    
   let response = axiosTest().then(function (data) {
     console.log(data);
     switch (data) {
       case "INVALID USERNAME/PASSWORD":
+        Swal.fire({
+          icon: 'error',
+          title: '<p style="color:#FFF";>Invalid Username/Password</p>',
+          width: '350',
+          html: '<p style="color:#FFF";>Please check the username/password</p>',
+          background: '#000000'
+        })
         //This error cannot happen unless server side ussue : just alert invalid username/password
         //TODO Alert message
         //redirect to signup page
-        window.location.href = "signup.html";
         break;
       case "ERROR: UNABLE TO RESET OTP":
+        Swal.fire({
+          icon: 'error',
+          title: '<p style="color:#FFF";>Error</p>',
+          width: '350',
+          
+          
+          html: '<p style="color:#FFF";>Unable to Reset the OTP, Please try again</p>',
+          background: '#000000'
+        }).then((result) => {
+          document.getElementById("verify-btn").disabled = false;
+          document.getElementById("resend-btn").disabled = false;
+        })
+
         //TODO Alert message
         //this happens normally cas of a server side issue..just alert to try again or contact helpdesk (dont forget to enable the two buttons)
         //update error, try again or sth //TODO Check
@@ -75,19 +108,44 @@ function otpVerify() {
       case "SUCCESS: OTP RESET":
         //TODO Alert message
         //enable verify button again
-        document.getElementById("verify-btn").disabled = false;
-        resendvalue = 0;
+        Swal.fire({
+          icon: 'success',
+          title: '<p style="color:#FFF";>Success</p>',
+          width: '350',
+          
+          
+          html: '<p style="color:#FFF";>Your New OTP has been sent to your Mobile</p>',
+          background: '#000000'
+        }).then((result) => {
+          document.getElementById("verify-btn").disabled = false;
+          resendvalue = 0;
+        })
+
         break;
-      case "ERROR: OTP MISMATCH`":
-        //TODO Alert message
-        //we might have to enable the buttons again or find another way to deal with this
-        // we can ask him to click on resend otp
-        console.log('in the case where the buttons should be enabled');
-        document.getElementById("verify-btn").disabled = false;
-        document.getElementById("resend-btn").disabled = false;
+      case "ERROR: OTP MISMATCH":
+        Swal.fire({
+          icon: 'error',
+          title: '<p style="color:#FFF";>Invalid OTP</p>',
+          width: '350',
+          
+          
+          html: '<p style="color:#FFF";>Please check if you have entered the correct OTP</p>',
+          background: '#000000'
+        }).then((result) => {
+          document.getElementById("verify-btn").disabled = false;
+          document.getElementById("resend-btn").disabled = false;
+        })
         break;
       case "SUCCESS: OTP VERIFIED":
-        window.location.href = "index.html";
+        Swal.fire({
+          icon: 'success',
+          title: '<p style="color:#FFF";>OTP Verified</p>',
+          width: '350',
+          html: '<p style="color:#FFF";>OTP successfully verified, please proceed to Login</p>',
+          background: '#000000'
+        }).then((result) => {
+          window.location.href = "index.html";
+        })
         break;
     }
   });

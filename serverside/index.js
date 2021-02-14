@@ -3,9 +3,9 @@ const bcrypt = require("bcrypt");
 const express = require("express");
 const NodeRSA = require("node-rsa");
 const { randomInt } = require("crypto");
-const https = require('https');
-const http = require('http');
-const fs = require('fs')
+const https = require("https");
+const http = require("http");
+const fs = require("fs");
 const app = express();
 const { parse, stringify } = require("flatted");
 
@@ -15,13 +15,13 @@ const priv_key = new NodeRSA(s_privkey, "pkcs1-private-pem");
 
 AWS.config.update({
   region: "ap-south-1",
-  accessKeyId: 'AKIAQNYSRWDVTHC4LSW3',
-  secretAccessKey : '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'
+  accessKeyId: "AKIAQNYSRWDVTHC4LSW3",
+  secretAccessKey: "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",
 });
 
-const privateKey  = fs.readFileSync('cert/server.key', 'utf8');
-const certificate = fs.readFileSync('cert/server.cert', 'utf8');
-const credentials = {key: privateKey, cert: certificate};
+const privateKey = fs.readFileSync("cert/server.key", "utf8");
+const certificate = fs.readFileSync("cert/server.cert", "utf8");
+const credentials = { key: privateKey, cert: certificate };
 const docClient = new AWS.DynamoDB.DocumentClient();
 const table = "user_details";
 
@@ -39,7 +39,6 @@ function sendSMS(to_number, message, cb) {
 
 /**sign up */
 app.get("/api/generalusersignup/:data", (req, res) => {
-
   /**
    * * receive and decrypt
    */
@@ -47,7 +46,7 @@ app.get("/api/generalusersignup/:data", (req, res) => {
   let prepData = Buffer.from(req.params.data, "hex");
   let decryptedData = priv_key.decrypt(prepData); //type is buffer
   let formattedData = decryptedData.toString();
-  let finalData = parse(formattedData);  
+  let finalData = parse(formattedData);
 
   //Code to check if the username already exists
   params = {
@@ -57,19 +56,17 @@ app.get("/api/generalusersignup/:data", (req, res) => {
     },
   };
   docClient.get(params, (err, data) => {
-    if(Object.entries(data).length == 0){
-
+    if (Object.entries(data).length == 0) {
       //User Doesnt exist
       finalData["OTP"] = Math.floor(100000 + Math.random() * 900000);
       sendSMS(
         finalData.phone,
         `Your One Time Password is ${finalData["OTP"]}. Do not Share it with anyone.`,
         (err, result) => {
-          if (err){
-            console.log('Internal Error: Failed To Send OTP')
-          }
-          else{
-            console.log('Log: Successfully Sent OTP');
+          if (err) {
+            console.log("Internal Error: Failed To Send OTP");
+          } else {
+            console.log("Log: Successfully Sent OTP");
           }
         }
       );
@@ -80,17 +77,16 @@ app.get("/api/generalusersignup/:data", (req, res) => {
       };
       docClient.put(tableparams, function (err, data) {
         if (err) {
-          console.log('Internal Error: Failed to Create user');
+          console.log("Internal Error: Failed to Create user");
         } else {
-          console.log('Log: Successfully created user');
+          console.log("Log: Successfully created user");
         }
       });
       res.send("SUCCESS: USER CREATION");
+    } else {
+      res.send("ERROR: USER EXISTS");
     }
-    else{
-      res.send("ERROR: USER EXISTS")
-    }
-  })
+  });
 });
 
 /**login*/
@@ -110,7 +106,7 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
   docClient.get(params, (err, data) => {
     if (Object.entries(data).length == 0 || data.Item.OTPVerified == "false") {
       res.send("ERROR: INVALID USERNAME/PASSWORD");
-      console.log('Log: User doesnt exist/OTP not verified')
+      console.log("Log: User doesnt exist/OTP not verified");
     } else {
       if (finalData.userName == data.Item.userName) {
         bcrypt.compare(
@@ -124,29 +120,31 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
                 UserName: finalData.userName,
               };
               iam.createUser(params, function (err, data) {
-                if(err){
-                  console.log("Log: Possible UserCreation Error");
-                } 
-              });
-
-              iam.createAccessKey(params, function (err, udata) {
                 if (err) {
-                  console.log("Log: Possible AccessKey Creation Error");
+                  console.log("Log: Possible UserCreation Error");
                 } else {
-                    udata['fullname'] = data.Item.fullName
-                    temps = stringify(udata);
-                    let temp_encrypted = priv_key.encryptPrivate(temps);
-                    let hexEnc = Buffer.from(temp_encrypted).toString("hex");
-                    console.log('Log: Successfully sent AccessCodes')
-                    res.send(hexEnc);
-                }
-              });
+                  iam.createAccessKey(params, function (err, udata) {
+                    if (err) {
+                      console.log("Log: Possible AccessKey Creation Error");
+                    } else {
+                      udata["fullname"] = data.Item.fullName;
+                      temps = stringify(udata);
+                      let temp_encrypted = priv_key.encryptPrivate(temps);
+                      let hexEnc = Buffer.from(temp_encrypted).toString("hex");
+                      console.log("Log: Successfully sent AccessCodes");
+                      res.send(hexEnc);
 
-              params["GroupName"] = "CNBasicUser";
-              iam.addUserToGroup(params, function (err, data) {
-                if (err){
-                  console.log("Log: Possible Error in Adding User to Group");
-                } 
+                      params["GroupName"] = "CNBasicUser";
+                      iam.addUserToGroup(params, function (err, data) {
+                        if (err) {
+                          console.log(
+                            "Log: Possible Error in Adding User to Group"
+                          );
+                        }
+                      });
+                    }
+                  });
+                }
               });
             } else {
               res.send("ERROR: INVALID USERNAME/PASSWORD");
@@ -157,7 +155,9 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
           }
         );
       } else {
-        console.log(`Log: ${finalData.userName} compared to ${data.Item.userName} - failure`);
+        console.log(
+          `Log: ${finalData.userName} compared to ${data.Item.userName} - failure`
+        );
         res.send("ERROR: INVALID USERNAME/PASSWORD");
       }
     }
@@ -181,7 +181,9 @@ app.get("/api/generaluserverify/:data/:resendvalue", (req, res) => {
 
   docClient.get(params, (err, data) => {
     if (err) {
-      console.log('Internal Error: Error fetching user details (Waiting for retry)')
+      console.log(
+        "Internal Error: Error fetching user details (Waiting for retry)"
+      );
       res.send("ERROR: INVALID USERNAME/PASSWORD");
     } else {
       if (resendvalue == 1) {
@@ -198,17 +200,16 @@ app.get("/api/generaluserverify/:data/:resendvalue", (req, res) => {
         };
         docClient.update(params, (err, udata) => {
           if (err) {
-            console.log('Internal Error: Error Resetting OTP');
+            console.log("Internal Error: Error Resetting OTP");
             res.send("ERROR: UNABLE TO RESET OTP");
           } else {
             sendSMS(
               data.Item.phone,
               `Your One Time Password is ${udata.Attributes.OTP}. Do not Share it with anyone.`,
               (err, result) => {
-                if(err){
-                  console.log('Internal Error: Unable to Send SMS')
-                }
-                else{
+                if (err) {
+                  console.log("Internal Error: Unable to Send SMS");
+                } else {
                   console.log("Log: Successfully Sent New SMS");
                 }
               }
@@ -227,7 +228,7 @@ app.get("/api/generaluserverify/:data/:resendvalue", (req, res) => {
             },
             UpdateExpression: "set OTPVerified = :r",
             ExpressionAttributeValues: {
-              ":r":'true'
+              ":r": "true",
             },
             ReturnValues: "UPDATED_NEW",
           };
@@ -239,7 +240,9 @@ app.get("/api/generaluserverify/:data/:resendvalue", (req, res) => {
             }
           });
         } else {
-          console.log(`Log: ${data.Item.OTP} compared to ${finalData.OTP} : Mismatch`);
+          console.log(
+            `Log: ${data.Item.OTP} compared to ${finalData.OTP} : Mismatch`
+          );
           res.send("ERROR: OTP MISMATCH");
         }
       }
@@ -247,10 +250,8 @@ app.get("/api/generaluserverify/:data/:resendvalue", (req, res) => {
   });
 });
 
-
-
 const httpsServer = https.createServer(credentials, app);
 const httpserver = http.createServer(app);
 
-httpsServer.listen('8443')
+httpsServer.listen("8443");
 //httpserver.listen('5500') Fully Transitioned to HTTPS Server
