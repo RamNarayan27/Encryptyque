@@ -47,7 +47,7 @@ function checkAndWrite() {
       let stringUserDetails = stringify(user_details);
       let encryptedDetails = server_pubkey.encrypt(stringUserDetails);
       let hexEnc = Buffer.from(encryptedDetails).toString("hex");
-      url = "http://3.131.252.234:5500/api/generalusersignup/" + hexEnc;
+      url = "https://3.131.252.234:8443/api/generalusersignup/" + hexEnc + '/';
       let response = axiosTest().then(function (data) {
         switch (data) {
           case "UserExists": 

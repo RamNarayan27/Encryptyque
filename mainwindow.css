@@ -1,0 +1,29 @@
+html{
+    background-image: url('background.png');
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: repeat;
+}
+.spl-box{
+    width: 62.5rem;
+    height: 31.25rem;
+    background-color: grey;
+    border-radius: 20px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    padding-left: 10px;
+    padding-right: 10px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+.spl-box::-webkit-scrollbar{
+    width: 1em;
+}
+.spl-box::-webkit-scrollbar-thumb {
+    background-color: darkgrey;
+    outline: 1px solid slategrey;
+    border-bottom-right-radius: 25px;
+    border-top-right-radius: 25px;
+    /* * Have to fix the scroll bar */
+}

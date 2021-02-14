@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -10,7 +9,6 @@
     <link rel="stylesheet" href="style.css">
     <title>Encryptyque</title>
 </head>
-
 <body>
     <section class="section"></section>
     <section class="section">
@@ -24,33 +22,29 @@
                 <div class="level-right">
                     <div class="level-item">
                         <div class="box">
-                            <div class="has-text-centered">Enter the OTP you received on your mobile number</div>
+                            <h1 class="title is-1 has-text-centered has-text-primary-dark" >LOG IN</h1>
                             <br>
                             <div class="field">
-                                <input type="password" class="input" id="otp-verify" placeholder="XXXXXX">
+                                <label class="label ">Username:</label>
+                                <input type="text" id="username"class="input" placeholder="Username">
+                            </div>
+                            <div class="field">
+                                <label class="label">Password:</label>
+                                <input type="password" id="password" class="input" placeholder="Password">
                             </div>
                             <div class="field">
                                 <div class="has-text-centered">
-                                    <button class="button is-primary is-rounded" id="verify-btn" onclick="otpVerify()">Verfiy</button>
+                                    <button class="button is-primary is-rounded" onclick="readAndValidate()">Login</button>
                                 </div>
                             </div>
-                            <br>
-                            <div class="has-text-centered">Didn't receive your OTP?</div>
-                            <div class="field">
-                                <br>
-                                <div class="has-text-centered">
-                                    <button class="button is-primary is-rounded is-centered" id="resend-btn" onclick="resendValInc()">Resend
-                                        OTP</button>
-                                </div>
-                                
-                            </div>
+                            
+                            <div class="has-text-centered has-text-primary-dark">New here? <a href="signup.html" class="has-text-primary-dark"><u>Click here</u></a> to signup</div>
                         </div>
                     </div>
                 </div>
             </nav>
         </div>
     </section>
-    <script src="otpverify.js"></script>
+    <script src="login.js"></script>
 </body>
-
 </html>
