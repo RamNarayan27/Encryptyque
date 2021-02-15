@@ -6,6 +6,7 @@ const dataStore = require("data-store")({
 });
 const Swal = require('sweetalert2')
 const https = require("https");
+const fs = require('fs');
 
 
 /**
@@ -48,6 +49,7 @@ function readAndValidate() {
     allowOutsideClick: false,
     showConfirmButton: false
   })
+
   let response = axiosTest().then(function (data) {
     switch (data) {
       case 'ERROR: INVALID USERNAME/PASSWORD':
@@ -68,7 +70,6 @@ function readAndValidate() {
           html: '<p style="color:#FFF";>Successfully logged in, Setting up your credentials</p>',
           background: '#000000'
         }).then((result) =>{
-          dataStore.set('unique-username',userName.value);
           dataStore.set('fullname',data['fullname'])
           dataStore.set('creds',data);
           //redirect to mainwindow.html

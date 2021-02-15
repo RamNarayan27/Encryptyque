@@ -250,6 +250,20 @@ app.get("/api/generaluserverify/:data/:resendvalue", (req, res) => {
   });
 });
 
+app.get("/api/generalusersignout/:data", (req,res) => {
+  let prepData = Buffer.from(req.params.data, "hex");
+  let decryptedData = priv_key.decrypt(prepData); //type is buffer
+  let formattedData = decryptedData.toString();
+  let finalData = parse(formattedData);
+
+  var params = {
+    UserName: finalData['userName']
+   };
+   iam.deleteUser(params, function(err, data) {
+     if (err) res.send('ERROR: FAILED TO SIGNOUT');
+     else res.send('SUCCESS: SIGNED OUT'); 
+   });
+})
 const httpsServer = https.createServer(credentials, app);
 const httpserver = http.createServer(app);
 

@@ -2,7 +2,7 @@ const NodeRSA = require("node-rsa");
 const axios = require("axios");
 const { parse, stringify } = require("flatted");
 const dataStore = require("data-store")({
-  path: process.cwd() + "/conf.json",
+  path: process.cwd() + "/creds.json",
 });
 const https = require("https");
 const Swal = require('sweetalert2')

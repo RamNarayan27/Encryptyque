@@ -13,8 +13,9 @@ needed functions :
 //Imports
 const AWS = require("aws-sdk");
 const NodeRSA = require("node-rsa");
-const conf = require("data-store")({ path: process.cwd() + "\\config.json" });
 const cred = require('data-store')({ path: process.cwd() + '\\creds.json' });
+conf_name = cred.get('unique-username')
+const conf = require("data-store")({ path: process.cwd() + "\\" + conf_name + ".json" });
 const rec_list = require("data-store")({
   path: process.cwd() + "\\friend_list.json",
 });
@@ -41,6 +42,8 @@ let decryptedData = server_pubkey.decryptPublic(prepData);
 let formattedData = decryptedData.toString();
 let finalData = parse(formattedData);
 
+userfullname = finalData['fullname']
+conf.set('user-fullname',userfullname)
 accesskey = finalData.AccessKey.AccessKeyId;
 secretkey = finalData.AccessKey.SecretAccessKey;
 
