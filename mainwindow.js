@@ -2,9 +2,13 @@ const fs = require("fs");
 const https = require("https");
 const Swal = require("sweetalert2");
 const axios = require("axios");
+const Base64 = require("js-base64");
 const cred = require("data-store")({ path: process.cwd() + "/creds.json" });
-conf_name = cred.get('unique-username');
-const conf = require("data-store")({ path: process.cwd() + "/" + conf_name + ".json" });
+conf_name = cred.get("unique-username");
+const crypto = require("crypto");
+const conf = require("data-store")({
+  path: process.cwd() + "/" + conf_name + ".json",
+});
 const { parse, stringify } = require("flatted");
 const NodeRSA = require("node-rsa");
 const AWS = require("aws-sdk");
@@ -12,12 +16,18 @@ const notifier = require("node-notifier");
 const dataStore = require("data-store");
 const inbox = require("data-store")({ path: process.cwd() + "/inbox.json" });
 
+function mypublickey() {
+  return parse(conf.get("publickey"));
+}
+function myprivatekey() {
+  return parse(conf.get("privatekey"));
+}
+
 AWS.config.update({
   region: "ap-south-1",
   //accessKeyId: accesskey,
   //secretAccessKey: secretkey,
 });
-
 
 if (!fs.existsSync("./inbox")) {
   fs.mkdirSync("./inbox");
@@ -35,7 +45,6 @@ const userFullName = document.getElementById("user-fn");
 const userId = document.getElementById("user-id");
 const quotes = document.getElementById("quotes");
 const inbox_html = document.getElementById("inbox");
-
 
 function setStartUp() {
   userId.innerHTML = conf.get("unique-username");
@@ -72,12 +81,12 @@ async function delete_file(downloadID) {
   const path = process.cwd() + "\\inbox\\" + a_fname;
 
   try {
-    file_manager.access(path, file_manager.F_OK, (err) => {
+    fs.access(path, fs.F_OK, (err) => {
       if (err) {
         console.error(err);
         return;
       }
-      file_manager.unlink(
+      fs.unlink(
         path,
         (callback = function () {
           console.log("Deleted file");
@@ -112,9 +121,10 @@ async function delete_file(downloadID) {
   });
 
   s3.deleteObject(bucket_params, function (err, data) {
-    if (err) console.log('Failed to Delete File');
+    if (err) console.log("Failed to Delete File");
     else console.log("Deleted File on Storage");
   });
+  generateCards()
 }
 
 async function download_file(downloadID) {
@@ -157,7 +167,7 @@ async function download_file(downloadID) {
       for (var i = 0; i < length; i++) {
         ua[i] = binaryImg.charCodeAt(i);
       }
-      file_manager.writeFileSync(
+      fs.writeFileSync(
         process.cwd() + "/inbox/" + ef_actual_name,
         ua
       );
@@ -165,8 +175,10 @@ async function download_file(downloadID) {
   });
 }
 
-async function report_file(data){
-  require("shell").openExternal(`mailto:helpdesk.encryptyque@gmail.com?subject=Malicious File&body=${data}`);
+async function report_file(data) {
+  require("shell").openExternal(
+    `mailto:helpdesk.encryptyque@gmail.com?subject=Malicious File&body=${data}`
+  );
 }
 
 async function setinboxlength() {
@@ -182,7 +194,7 @@ async function setinboxlength() {
 }
 
 async function refresh_check() {
-  console.log('refresh check');
+  console.log("refresh check");
   const docClient = new AWS.DynamoDB.DocumentClient();
   const refresh_table = "transaction-manifest";
   my_name = conf.get("unique-username");
@@ -215,9 +227,10 @@ async function refresh_check() {
       );
     } else {
       data.Items.forEach(function (val) {
-        if (!inbox.has(val.transactionid)){
-          val["ReceivedTime"] = Date().toString().split('GMT')[0];
-        inbox.set(val.transactionid, val);}
+        if (!inbox.has(val.transactionid)) {
+          val["ReceivedTime"] = Date().toString().split("GMT")[0];
+          inbox.set(val.transactionid, val);
+        }
       });
       setinboxlength();
       if (conf.get("inbox-length") != old_inbox_length) {
@@ -228,25 +241,31 @@ async function refresh_check() {
   generateCards();
 }
 
-function generateCards(){
-  let inboxGenerator = inbox.json();
-  Object.values(inboxGenerator).forEach(function(val){
-    inbox_html.innerHTML += `<div class="column is-one-quarter">
-    <div class="card">
-        <div class="card-content has-text-centered">From<br>${val.from}<br>File
-            Name:<br>${val.actual_name}<br></div>
-        <div class="card-footer">
-            <div class="card-footer-item" onclick="download_file("${val.transactionid}")"><span class="icon material-icons">download</span>
-            </div>
-            <div class="card-footer-item" onclick="delete_file("${val.transactionid}")"><span class="icon material-icons">delete</span>
-            </div>
-            <div class="card-footer-item" onclick="report_file(${val})"><span class="icon material-icons">report</span>
-            </div>
-        </div>
-        <div class="has-text-centered">${val.ReceivedTime}</div>
-    </div>
-</div>`
-  });
+function generateCards() {
+    inbox_html.innerHTML = ''
+    const inbox_data = fs.readFileSync("inbox.json");
+    const inbox_i = JSON.parse(inbox_data);
+    const len = Object.keys(inbox_i);
+    
+    console.log(len)
+    for(let dis_key of len){
+      inbox_html.innerHTML = inbox_html.innerHTML + `<div class="column is-one-quarter">
+      <div class="card">
+          <div class="card-content has-text-centered">From<br>${inbox.get(dis_key).from}<br>File
+              Name:<br>${inbox.get(dis_key).actual_name}<br></div>
+          <div class="card-footer">
+              <div class="card-footer-item" onclick="download_file('${inbox.get(dis_key).transactionid}')"><span class="icon material-icons">download</span>
+              </div>
+              <div class="card-footer-item" onclick="delete_file('${inbox.get(dis_key).transactionid}')"><span class="icon material-icons">delete</span>
+              </div>
+              <div class="card-footer-item" onclick="report_file(${inbox.get(dis_key)})"><span class="icon material-icons">report</span>
+              </div>
+          </div>
+          <div class="has-text-centered">${inbox.get(dis_key).ReceivedTime}</div>
+      </div>
+  </div>`;
 }
-
+}
+    
 setStartUp();
+
