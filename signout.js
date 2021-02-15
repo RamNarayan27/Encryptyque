@@ -2,7 +2,14 @@ const fs = require('fs');
 const https = require("https");
 const Swal = require('sweetalert2')
 const axios = require("axios");
+const cred_to_rem = require('data-store')({ path: process.cwd() + '/creds.json' });
+const { parse, stringify } = require("flatted");
+const NodeRSA = require("node-rsa");
 
+
+const server_public_key =
+  "\n-----BEGIN PUBLIC KEY-----\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI/Ip/FSDW2ZQfUSfbrFJrVx95crrvUg\n5pi8GEZ5Z1Ahw3UwQlcqQqPlC0FKDcWSvDk1Md7wpk5/PpkxVH6AAK0CAwEAAQ==\n-----END PUBLIC KEY-----\n";
+const server_pubkey = NodeRSA(server_public_key, "pkcs8-public-pem");
 
 const instance = axios.create({
     httpsAgent: new https.Agent({  
@@ -11,9 +18,11 @@ const instance = axios.create({
   });
 
 function signmeout(){
-    const uniq_name = cred.get('unique-username')
+    const uniq_name = cred_to_rem.get('unique-username')
     if(fs.existsSync('./creds.json')){
-        fs.unlink('./creds.json')
+        fs.unlink('./creds.json', (err) => {
+          if(err) console.log('Failed to Delete Cred file')
+        })
     }
 
     data = {
@@ -46,6 +55,8 @@ function signmeout(){
                 background: '#000000'
               }).then((result) => {
                 window.location.href = "index.html";        
+              }).then((result) => {
+                return true
               })
         break;
 
@@ -57,6 +68,7 @@ function signmeout(){
                 html: '<p style="color:#FFF";>Failed to sign out, contack helpdesk or try again</p>',
                 background: '#000000'
               })
+              
         break;
     }})
 }
@@ -64,4 +76,6 @@ function signmeout(){
 function axiosTest() {
     return instance.get(url).then((response) => response.data);
   }
+
+signmeout()
   

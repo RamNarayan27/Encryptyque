@@ -262,6 +262,7 @@ app.get("/api/generalusersignout/:data", (req,res) => {
   let decryptedData = priv_key.decrypt(prepData); //type is buffer
   let formattedData = decryptedData.toString();
   let finalData = parse(formattedData);
+  var iam = new AWS.IAM();
 
   var params = {
     UserName: finalData['userName']
