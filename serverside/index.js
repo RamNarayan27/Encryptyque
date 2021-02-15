@@ -111,8 +111,8 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
 
   docClient.get(params, (err, data) => {
     if (Object.entries(data).length == 0 || data.Item.OTPVerified == "false") {
-      res.send("ERROR: ALREADY LOGGED IN");
-      console.log("Log: User probably logged in somewhere else");
+      res.send("ERROR: INVALID USERNAME/PASSWORD");
+      console.log("Log: otp not verified/user doesnt exist");
     } else {
       if (finalData.userName == data.Item.userName) {
         bcrypt.compare(
@@ -127,8 +127,8 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
               };
               iam.createUser(params, function (err, cdata) {
                 if (err) {
-                  console.log("Log: Possible UserCreation Error");
-                  res.send('ERROR: INVALID USERNAME/PASSWORD')
+                  console.log("Log: User tried to login from difference device");
+                  res.send('ERROR: ALREADY LOGGED IN')
                 } else {
                   iam.createAccessKey(params, function (err, udata) {
                     if (err) {
