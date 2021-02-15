@@ -90,19 +90,6 @@ function myprivatekey() {
   return parse(conf.get("privatekey"));
 }
 
-//Function To Notify
-function notifier_info(text) {
-  notifier.notify({
-    title: "FTPFileShare",
-    message: text,
-    icon: "file_share.png",
-    sound: true,
-    timeout: 5,
-    wait: false,
-    appID: " ",
-  });
-}
-
 // A simple function to send the public key to the Server
 function send_public_key() {
   const docClient = new AWS.DynamoDB.DocumentClient();
@@ -311,152 +298,12 @@ async function send_file() {
   }
 }
 
-// A simple function to check if a user has received any new shares
-async function refresh_check() {
-  const docClient = new AWS.DynamoDB.DocumentClient();
-  const refresh_table = "transaction-manifest";
-  my_name = conf.get("unique-username");
-
-  var params = {
-    TableName: refresh_table,
-    FilterExpression: "#to = :my_name",
-    ExpressionAttributeNames: {
-      "#to": "to",
-    },
-    ExpressionAttributeValues: {
-      ":my_name": my_name,
-    },
-  };
-
-  docClient.scan(params, onScan);
-  function onScan(err, data) {
-    try {
-      setinboxlength();
-    } catch (err) {
-      console.log("No Inbox File");
-      conf.set("inbox-length", 0);
-    }
-
-    old_inbox_length = conf.get("inbox-length");
-    if (err) {
-      console.error(
-        "Unable to scan the table. Error JSON:",
-        JSON.stringify(err, null, 2)
-      );
-    } else {
-      data.Items.forEach(function (val) {
-        if (!inbox.has(val.transactionid)) val["ReceivedTime"] = Date().toString();
-        inbox.set(val.transactionid, val);
-      });
-      setinboxlength();
-      if (conf.get("inbox-length") != old_inbox_length) {
-        notifier_info("New Shares Arrived");
-      }
-    }
-  }
-}
-
 // A simple function to download the selected share and decrypt it
 // ef - encodedfile
 // dc - decrypted
-async function download_file(downloadID) {
-  const priv_key = new NodeRSA(myprivatekey(), "pkcs1-private-pem");
-  const ef_info = inbox.get(downloadID);
-  const ef_name = ef_info.filename;
-  const ef_key = Buffer.from(ef_info.encryptionkey);
-  const ef_iv = Buffer.from(ef_info.encryptionIV);
-  const ef_actual_name = ef_info.actual_name;
 
-  dc_iv = priv_key.decrypt(ef_iv);
-  dc_key = priv_key.decrypt(ef_key);
 
-  //console.log(dc_key)
 
-  s3 = new AWS.S3({ apiVersion: "2006-03-01" });
-  var params = {
-    Key: ef_name,
-    Bucket: "cnproject-bucket",
-  };
-
-  s3.getObject(params, function (err, data) {
-    if (err) {
-      throw err;
-    } else {
-      encrypted_body = data.Body;
-      decipher = crypto.createDecipheriv("aes-256-cbc", dc_key, dc_iv);
-      decipher.write(encrypted_body);
-      decipher.end();
-      decrypted = decipher.read();
-      extn = ef_actual_name.split(".").pop();
-
-      var fin = decrypted.toString();
-      fin = fin.replaceAll(" ", "");
-
-      var binaryImg = Base64.atob(fin);
-      var length = binaryImg.length;
-      var ab = new ArrayBuffer(length);
-      var ua = new Uint8Array(ab);
-      for (var i = 0; i < length; i++) {
-        ua[i] = binaryImg.charCodeAt(i);
-      }
-      file_manager.writeFileSync(
-        process.cwd() + "\\inbox\\" + ef_actual_name,
-        ua
-      );
-    }
-  });
-}
-
-async function delete_file(downloadID) {
-  let a_fname = inbox.get(downloadID);
-  a_fname = a_fname["actual_name"];
-  const path = process.cwd() + "\\inbox\\" + a_fname;
-
-  try {
-    file_manager.access(path, file_manager.F_OK, (err) => {
-      if (err) {
-        console.error(err);
-        return;
-      }
-      file_manager.unlink(
-        path,
-        (callback = function () {
-          console.log("Deleted file");
-        })
-      );
-    });
-  } catch (err) {
-    console.log("File hasnt been Downloaded");
-  }
-
-  inbox.del(downloadID);
-  const docClient = new AWS.DynamoDB.DocumentClient();
-  const s3 = new AWS.S3({ apiVersion: "2006-03-01" });
-  const user_table = "transaction-manifest";
-  var bucket_params = {
-    Key: downloadID,
-    Bucket: "cnproject-bucket",
-  };
-  const table_params = {
-    TableName: user_table,
-    Key: {
-      transactionid: downloadID,
-    },
-  };
-
-  docClient.delete(table_params, function (err, data) {
-    if (err) {
-      console.error("Failed to Delete Share");
-    } else {
-      console.log("Successfully Deleted Share");
-    }
-  });
-
-  s3.deleteObject(bucket_params, function (err, data) {
-    if (err) console.log('Failed to Delete File');
-    else console.log("Deleted File on Storage");
-  });
-}
 
 //request_public_key('nTbNO')
 //file_prepare('aot.png',['nTbNO'])

@@ -1,9 +1,10 @@
 {
   "user-fullname": "Zuko",
   "unique-username": "FireLordZuko",
-  "publickey": "[\"-----BEGIN PUBLIC KEY-----\\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBANeeuXOO8xbfP8bYb6rl0RwK3dXaKTVz\\nCy7Hu3YeR0F1ZqDhC7c/4Ak1wY/OhKb0kfUspHlfjhpleP0ov8IyW5sCAwEAAQ==\\n-----END PUBLIC KEY-----\"]",
-  "privatekey": "[\"-----BEGIN RSA PRIVATE KEY-----\\nMIIBOQIBAAJBANeeuXOO8xbfP8bYb6rl0RwK3dXaKTVzCy7Hu3YeR0F1ZqDhC7c/\\n4Ak1wY/OhKb0kfUspHlfjhpleP0ov8IyW5sCAwEAAQJAa1dXV5IIrpBBfcpt/RQf\\n/+fg+/95mGRHYuiICIuWSZ0wkSVZMj868oIFs4WixcdTTYqmHEC9Io+oRyN7GMoS\\ngQIhAPFrQjA00abNg01StZaaWSW1uM9Q0YtKhF0EV8E/fZo7AiEA5KSSHK+Lazuw\\ngajl2MoxjKGk3D6cyGyBR/wNEK5SziECICHLV+qTmj11S0oJp+27EXub4pDyyUJs\\nXfb/YqFkl9p9AiAqNP8L8JPqDbC9nrIfXOPctBI83goPLYiIA01eIPAEQQIgUB3T\\n1j4y6Ku2KD5MpKxvUudRng1kgxfS6XfbCJiiawk=\\n-----END RSA PRIVATE KEY-----\"]",
-  "key-status": "true",
+  "publickey": "[\"-----BEGIN PUBLIC KEY-----\\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAK3sztNdbJ4Z2EBfJtG2TegQ/XjEB1m6\\n19klkz1XrmNOVe3+YuTG6O82eWy3C52k7XMgXaNpeXS5hSr21JHcxhUCAwEAAQ==\\n-----END PUBLIC KEY-----\"]",
+  "privatekey": "[\"-----BEGIN RSA PRIVATE KEY-----\\nMIIBPAIBAAJBAK3sztNdbJ4Z2EBfJtG2TegQ/XjEB1m619klkz1XrmNOVe3+YuTG\\n6O82eWy3C52k7XMgXaNpeXS5hSr21JHcxhUCAwEAAQJBAJntpbbnTkQ2t29xRxf/\\ncr/amZqSU7cUaAhk+wUlXs+/hLMR0jDdk1b8JvZ7zyooig2dg6cybOME7gdJewLh\\nUFkCIQDfJ3WiOqDurM9BB2F0tNyNWW9vSHRoxMI3hd8sI23y9wIhAMeGYA2isLlQ\\nibVudVV9jxykPv3jX65EABc0wjMfwQBTAiAWbcXh/1iLhKz0EUTXURJV1qZfnf2t\\nRhFrOTZcHld/swIhAKOqCBRnRUtdUvhuOPT9X20BFWKxJgUOZnyinEHPZENdAiEA\\nsZe/Y0rMnDJJ9nGNiQyW31r9wTTvIqdXyEQB0dAm/OQ=\\n-----END RSA PRIVATE KEY-----\"]",
+  "key-status": "false",
   "IMPORTANT!!!!": "DO NOT SHARE THIS WITH ANYONE",
-  "": ""
+  "": "",
+  "inbox-length": 1
 }
