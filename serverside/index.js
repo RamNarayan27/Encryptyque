@@ -111,8 +111,8 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
 
   docClient.get(params, (err, data) => {
     if (Object.entries(data).length == 0 || data.Item.OTPVerified == "false") {
-      res.send("ERROR: INVALID USERNAME/PASSWORD");
-      console.log("Log: User doesnt exist/OTP not verified");
+      res.send("ERROR: ALREADY LOGGED IN");
+      console.log("Log: User probably logged in somewhere else");
     } else {
       if (finalData.userName == data.Item.userName) {
         bcrypt.compare(

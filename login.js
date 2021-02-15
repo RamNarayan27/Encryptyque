@@ -61,18 +61,18 @@ function readAndValidate() {
           background: '#000000'
         })
         break;
+      
+      case 'ERROR: ALREADY LOGGED IN':
+        Swal.fire({
+          icon: 'error',
+          title: '<p style="color:#FFF";>Already Logged In</p>',
+          width: '350',
+          html: '<p style="color:#FFF";>Please sign out if the account is signed in somewhere else</p>',
+          background: '#000000'
+        })
+        break;
 
       default:
-        if(data){
-          Swal.fire({
-            icon: 'error',
-            title: '<p style="color:#FFF";>Failed to Login</p>',
-            width: '350',
-            html: '<p style="color:#FFF";>Please ensure the account is not logged in somewhere else</p>',
-            background: '#000000'
-          })
-        }
-        else {
           Swal.fire({
             icon: 'success',
             title: '<p style="color:#FFF";>Success</p>',
@@ -86,7 +86,6 @@ function readAndValidate() {
             //redirect to mainwindow.html
             window.location.href = "mainwindow.html";        
           })
-        }
         break;
     }
   });
