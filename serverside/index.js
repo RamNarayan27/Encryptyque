@@ -265,7 +265,7 @@ app.get("/api/generalusersignout/:data", (req,res) => {
   var iam = new AWS.IAM();
 
   var params = {
-    userName: finalData['userName']
+    UserName: finalData["userName"]
    };
    iam.deleteUser(params, function(err, data) {
      if (err) {

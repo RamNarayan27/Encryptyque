@@ -26,7 +26,7 @@ function signmeout(){
     }
 
     data = {
-        'username':uniq_name
+        'userName':uniq_name
     }
 
     let stringUserDetails = stringify(data);
