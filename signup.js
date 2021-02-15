@@ -62,6 +62,15 @@ function checkAndWrite() {
 
       let response = axiosTest().then(function (data) {
         switch (data) {
+          case 'ERROR: CHECK DETAILS':
+            Swal.fire({
+              icon: 'error',
+              title: '<p style="color:#FFF";>Check Details</p>',
+              width: '350',
+              html: '<p style="color:#FFF";>Please check the details before submitting the form</p>',
+              background: '#000000'
+            });
+            break;
           case "ERROR: USER EXISTS": 
             Swal.fire({
               icon: 'error',

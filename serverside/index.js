@@ -56,6 +56,12 @@ app.get("/api/generalusersignup/:data", (req, res) => {
     },
   };
   docClient.get(params, (err, data) => {
+    try{
+      x = Object.entries(data).length
+    }
+    catch{
+      res.send('ERROR: CHECK DETAILS')
+    }
     if (Object.entries(data).length == 0) {
       //User Doesnt exist
       finalData["OTP"] = Math.floor(100000 + Math.random() * 900000);
@@ -251,6 +257,7 @@ app.get("/api/generaluserverify/:data/:resendvalue", (req, res) => {
 });
 
 app.get("/api/generalusersignout/:data", (req,res) => {
+
   let prepData = Buffer.from(req.params.data, "hex");
   let decryptedData = priv_key.decrypt(prepData); //type is buffer
   let formattedData = decryptedData.toString();
