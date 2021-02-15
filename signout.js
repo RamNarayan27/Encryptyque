@@ -1,3 +1,7 @@
+const cred_to_rem = require("data-store")({
+  path: process.cwd() + "/creds.json",
+});
+
 const instance = axios.create({
     httpsAgent: new https.Agent({  
       rejectUnauthorized: false

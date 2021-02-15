@@ -12,6 +12,7 @@ needed functions :
 
 //Imports
 const AWS = require("aws-sdk");
+const https = require('https')
 const NodeRSA = require("node-rsa");
 const cred = require('data-store')({ path: process.cwd() + '/creds.json' });
 conf_name = cred.get('unique-username')
@@ -26,30 +27,28 @@ const inbox = require("data-store")({ path: process.cwd() + "/inbox.json" });
 const { parse, stringify } = require("flatted");
 const crypto = require("crypto");
 const file_manager = require("fs");
+const fs = require('fs')
 const Base64 = require("js-base64");
 const { callbackify } = require("util");
 const notifier = require("node-notifier");
+const Swal = require('sweetalert2')
 const path = require("path");
+const axios = require('axios')
 
 const server_public_key =
   "\n-----BEGIN PUBLIC KEY-----\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI/Ip/FSDW2ZQfUSfbrFJrVx95crrvUg\n5pi8GEZ5Z1Ahw3UwQlcqQqPlC0FKDcWSvDk1Md7wpk5/PpkxVH6AAK0CAwEAAQ==\n-----END PUBLIC KEY-----\n";
 const server_pubkey = NodeRSA(server_public_key, "pkcs8-public-pem");
 
 cred_details = cred.get("creds");
-console.log(cred_details);
 let prepData = Buffer.from(cred_details, "hex");
 let decryptedData = server_pubkey.decryptPublic(prepData);
 let formattedData = decryptedData.toString();
 let finalData = parse(formattedData);
 
-userfullname = finalData['fullname']
-conf.set('user-fullname',userfullname)
 accesskey = finalData.AccessKey.AccessKeyId;
 secretkey = finalData.AccessKey.SecretAccessKey;
 
 //Initial Runs and Variable Declarations
-conf.set("IMPORTANT!!!!", "DO NOT SHARE THIS WITH ANYONE");
-conf.set("", "");
 if (!conf.has("unique-username")) console.log("Missing Unique Username");
 
 AWS.config.update({
@@ -60,7 +59,7 @@ AWS.config.update({
 
 // A simple function to check if the private key + public key is generated
 if (conf.get("key-status") !== "true") {
-  generate_pair();
+  send_public_key()
 }
 
 if (!file_manager.existsSync("./inbox")) {
@@ -115,25 +114,16 @@ function send_public_key() {
       publickey: mypublickey(),
     },
   };
+  console.log(params)
 
   docClient.put(params, function (err, data) {
     if (err) {
-      console.error("Failed To Add");
+      console.error("Failed To Add", err);
     } else {
       console.log("Successfully Added");
+      conf.set('key-status','true')
     }
   });
-}
-
-// A simple function to generate Private and Public Key and Store it
-async function generate_pair() {
-  const key = new NodeRSA({ b: 512 });
-
-  conf.set("publickey", stringify(key.exportKey(["public"])));
-  conf.set("privatekey", stringify(key.exportKey()));
-  conf.set("key-status", "true");
-
-  send_public_key();
 }
 
 // A simple function using Async Promise to Convert A file to Base64
@@ -471,7 +461,7 @@ async function delete_file(downloadID) {
 //request_public_key('nTbNO')
 //file_prepare('aot.png',['nTbNO'])
 //send_file()
-refresh_check()
+//refresh_check()
 //download_file('mnStwTMvv8Ka')
 //delete_file('mnStwTMvv8Ka')
 //setinboxlength()
