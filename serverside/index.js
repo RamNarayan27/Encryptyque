@@ -264,6 +264,15 @@ app.get("/api/generalusersignout/:data", (req,res) => {
   let finalData = parse(formattedData);
   var iam = new AWS.IAM();
 
+  var grp_params = {
+    UserName: finalData["userName"],
+    GroupName: 'CNBasicUser'
+   };
+   iam.removeUserFromGroup(grp_params, function(err, data) {
+    if (err) console.log(err, err.stack); // an error occurred
+    else     console.log('SUCCESS: Deleted user group'); // successful response
+  });
+
   var params = {
     UserName: finalData["userName"]
    };
