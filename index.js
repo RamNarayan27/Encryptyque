@@ -167,6 +167,10 @@ async function request_public_key(recipient_username) {
   }
 }
 
+async function discard_share(){
+  out_list.clear();
+}
+
 // A simple function to prepare the file for uploading
 async function file_prepare(file, recipient_list) {
   let promise = new Promise(function (resolve, reject) {
