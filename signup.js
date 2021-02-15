@@ -81,7 +81,6 @@ function checkAndWrite() {
             })
             console.log('User Exists')
             break;
-
           case "SUCCESS: USER CREATION":
             Swal.fire({
               icon: 'success',
