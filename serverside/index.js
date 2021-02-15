@@ -265,29 +265,52 @@ app.get("/api/generalusersignout/:data", (req,res) => {
   var iam = new AWS.IAM();
 
   var grp_params = {
-    UserName: finalData["userName"],
-    GroupName: 'CNBasicUser'
-   };
+  UserName: finalData["userName"],
+  GroupName: 'CNBasicUser'
+  };
+  var params = {
+  UserName: finalData["userName"]
+  };
+
    iam.removeUserFromGroup(grp_params, function(err, data) {
     if (err) console.log(err, err.stack); // an error occurred
-    else     console.log('SUCCESS: Deleted user group'); // successful response
+    else {
+      console.log('SUCCESS: Deleted user from group'); // successful response
+      iam.listAccessKeys(params, function(err, data) {
+        if (err) console.log(err, err.stack); // an error occurred
+        else {
+          temp_param = {
+            AccessKeyId : data.AccessKeyMetadata[0].AccessKeyId,
+            UserName : finalData["userName"]
+          }
+          iam.deleteAccessKey(temp_param, function(err, data) {
+            if (err) console.log('Internal Error: Failed to delete access key', err.stack);
+            else{
+              console.log('Success: Deleted Access Keys');
+              iam.deleteUser(params, function(err, data) {
+                if (err) {
+                  console.log('Internal Error: Failed to Delete Account',err)
+                  res.send('ERROR: FAILED TO SIGNOUT');
+                }
+                else
+                {
+                  console.log('SUCCESS: Deleted user account')
+                  res.send('SUCCESS: SIGNED OUT');
+                }
+              });
+            }
+          });
+        }})
+    
+    
+    
+    }
   });
 
-  var params = {
-    UserName: finalData["userName"]
-   };
-   iam.deleteUser(params, function(err, data) {
-     if (err) {
-       console.log('Internal Error: Failed to Delete Account',err)
-       res.send('ERROR: FAILED TO SIGNOUT');
-     }
-     else
-     {
-       console.log('SUCCESS: Deleted user account')
-       res.send('SUCCESS: SIGNED OUT');
-     }
-      
-   });
+  
+
+
+
 })
 const httpsServer = https.createServer(credentials, app);
 const httpserver = http.createServer(app);
