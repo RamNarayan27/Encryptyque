@@ -63,20 +63,30 @@ function readAndValidate() {
         break;
 
       default:
-        Swal.fire({
-          icon: 'success',
-          title: '<p style="color:#FFF";>Success</p>',
-          width: '350',
-          html: '<p style="color:#FFF";>Successfully logged in, Setting up your credentials</p>',
-          background: '#000000'
-        }).then((result) =>{
-          dataStore.set('unique-username',userName.value)
-          dataStore.set('fullname',data['fullname'])
-          dataStore.set('creds',data);
-          //redirect to mainwindow.html
-          window.location.href = "mainwindow.html";        
-        })
-        
+        if(data){
+          Swal.fire({
+            icon: 'error',
+            title: '<p style="color:#FFF";>Failed to Login</p>',
+            width: '350',
+            html: '<p style="color:#FFF";>Please ensure the account is not logged in somewhere else</p>',
+            background: '#000000'
+          })
+        }
+        else {
+          Swal.fire({
+            icon: 'success',
+            title: '<p style="color:#FFF";>Success</p>',
+            width: '350',
+            html: '<p style="color:#FFF";>Successfully logged in, Setting up your credentials</p>',
+            background: '#000000'
+          }).then((result) =>{
+            dataStore.set('unique-username',userName.value)
+            dataStore.set('fullname',data['fullname'])
+            dataStore.set('creds',data);
+            //redirect to mainwindow.html
+            window.location.href = "mainwindow.html";        
+          })
+        }
         break;
     }
   });

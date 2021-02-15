@@ -128,6 +128,7 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
               iam.createUser(params, function (err, cdata) {
                 if (err) {
                   console.log("Log: Possible UserCreation Error");
+                  res.send('ERROR: INVALID USERNAME/PASSWORD')
                 } else {
                   iam.createAccessKey(params, function (err, udata) {
                     if (err) {
