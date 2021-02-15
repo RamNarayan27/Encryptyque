@@ -70,6 +70,7 @@ function readAndValidate() {
           html: '<p style="color:#FFF";>Successfully logged in, Setting up your credentials</p>',
           background: '#000000'
         }).then((result) =>{
+          dataStore.set('unique-username',userName.value)
           dataStore.set('fullname',data['fullname'])
           dataStore.set('creds',data);
           //redirect to mainwindow.html

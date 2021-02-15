@@ -45,7 +45,8 @@ function signmeout(){
       })
 
     let response = axiosTest().then(function (data) {
-    switch (data) {
+    console.log(data);
+    switch (data) {        
         case 'SUCCESS: SIGNED OUT':
             Swal.fire({
                 icon: 'success',
@@ -70,6 +71,7 @@ function signmeout(){
               })
               
         break;
+        
     }})
 }
 

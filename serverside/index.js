@@ -265,11 +265,19 @@ app.get("/api/generalusersignout/:data", (req,res) => {
   var iam = new AWS.IAM();
 
   var params = {
-    UserName: finalData['userName']
+    userName: finalData['userName']
    };
    iam.deleteUser(params, function(err, data) {
-     if (err) res.send('ERROR: FAILED TO SIGNOUT');
-     else res.send('SUCCESS: SIGNED OUT'); 
+     if (err) {
+       console.log('Internal Error: Failed to Delete Account',err)
+       res.send('ERROR: FAILED TO SIGNOUT');
+     }
+     else
+     {
+       console.log('SUCCESS: Deleted user account')
+       res.send('SUCCESS: SIGNED OUT');
+     }
+      
    });
 })
 const httpsServer = https.createServer(credentials, app);
