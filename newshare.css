@@ -1,0 +1,17 @@
+html {
+    background-image: url("background.png");
+    height: 100%;
+    background-position: center;
+    background-size: cover;
+    background-repeat: repeat;
+}
+.has-max-width{
+    max-width: 690px;
+}
+.dashed-box{
+    border-style: dashed;
+    border-width: 5px;
+    max-width: 690px;
+    height: 250px;
+    border-color: white;
+}

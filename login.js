@@ -11,7 +11,7 @@ const fs = require('fs');
 
 /**
  * T̶O̶D̶O̶ E̶n̶c̶r̶y̶p̶t̶ a̶n̶d̶ s̶e̶n̶d̶ t̶h̶e̶ u̶s̶e̶r̶n̶a̶m̶e̶ a̶n̶d̶ p̶a̶s̶s̶w̶o̶r̶d̶ f̶i̶e̶l̶d̶s̶ t̶o̶ t̶h̶e̶ a̶p̶i̶ e̶n̶d̶p̶o̶i̶n̶t̶
- * TODO Set Alerts based on the responses that you receive
+ * T̶O̶D̶O̶ S̶e̶t̶ A̶l̶e̶r̶t̶s̶ b̶a̶s̶e̶d̶ o̶n̶ t̶h̶e̶ r̶e̶s̶p̶o̶n̶s̶e̶s̶ t̶h̶a̶t̶ y̶o̶u̶ r̶e̶c̶e̶i̶v̶e̶
  * T̶O̶D̶O̶ S̶a̶v̶e̶ t̶h̶e̶ A̶c̶c̶e̶s̶s̶ K̶e̶y̶ a̶n̶d̶ S̶e̶c̶r̶e̶t̶ A̶c̶c̶e̶s̶s̶ C̶o̶d̶e̶
  */
 

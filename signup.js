@@ -99,7 +99,13 @@ function checkAndWrite() {
       });
     });
   } else {
-    alert("password mismatch");
+    Swal.fire({
+      icon: 'error',
+      title: '<p style="color:#FFF";>Password Mismatch</p>',
+      width: '350',
+      html: '<p style="color:#FFF";>Please make sure the passwords match</p>',
+      background: '#000000'
+    })
   }
 }
 function axiosTest() {
