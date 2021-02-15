@@ -128,7 +128,7 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
               iam.createUser(params, function (err, cdata) {
                 if (err) {
                   console.log("Log: User tried to login from difference device");
-                  res.send('ERROR: ERROR: ALREADY LOGGED IN')
+                  res.send('ERROR: ALREADY LOGGED IN')
                 } else {
                   iam.createAccessKey(params, function (err, udata) {
                     if (err) {
