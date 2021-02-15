@@ -119,7 +119,7 @@ app.get("/api/generaluserlogin/:data", (req, res) => {
               var params = {
                 UserName: finalData.userName,
               };
-              iam.createUser(params, function (err, data) {
+              iam.createUser(params, function (err, cdata) {
                 if (err) {
                   console.log("Log: Possible UserCreation Error");
                 } else {
