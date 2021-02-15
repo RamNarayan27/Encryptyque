@@ -1,0 +1,8 @@
+{
+  "user-fullname": "Zuko",
+  "IMPORTANT!!!!": "DO NOT SHARE THIS WITH ANYONE",
+  "": "",
+  "publickey": "[\"-----BEGIN PUBLIC KEY-----\\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAJMpgQXzhKAIYh7Y14LilmlY6hHbWWWm\\n6kqMOX/ysYXP8zkq/eQFBRQMZCndClhQBsf/fq51Lv7xYfVsrWkJf40CAwEAAQ==\\n-----END PUBLIC KEY-----\"]",
+  "privatekey": "[\"-----BEGIN RSA PRIVATE KEY-----\\nMIIBOgIBAAJBAJMpgQXzhKAIYh7Y14LilmlY6hHbWWWm6kqMOX/ysYXP8zkq/eQF\\nBRQMZCndClhQBsf/fq51Lv7xYfVsrWkJf40CAwEAAQJAJ7IUWZSce8aHIScAyw9v\\n3y7axMJUVPU3UbCNehPvCtbqWn4LWvpIbM+EGGmHwpxyJn6LOcMq1mA3NLvR/EKv\\nQQIhAMYnbc3DfRSwxN7Gy3iZvliz7ymneJzztxQ9yREIHml1AiEAvh9REq+yubDQ\\nH9D8p+YSLQHzwAob3s0d5bpgLPVe4rkCIA0LJ2U2CxPDlxH7EAW+SRNZtNKPHZdn\\nS5PfhU7DtAzJAiEApjlVNcQ9u9JWNOsQa29hBs7FIWr1MRgfAqKvwb8KJakCIECh\\ns0gn/fIelqlHlRsxQGrpA2y3y+4pSGKEew+rsmMl\\n-----END RSA PRIVATE KEY-----\"]",
+  "key-status": "true"
+}

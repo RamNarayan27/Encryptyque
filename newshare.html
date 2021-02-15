@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=p, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="newshare.css">
     <link rel="stylesheet" href="newsharebulma.css">
     <title>Encryptyque</title>
@@ -16,7 +16,7 @@
                     <ul>
                         <li><a href="newshare.html">NEW SHARE</a></li>
                         <li><a href="mainwindow.html">INBOX</a></li>
-                        <li><a href="index.html">SIGN OUT</a></li>
+                        <li><a href="index.html" onclick="signmeout()">SIGN OUT</a></li>
                     </ul>
                 </nav>
             </div>
@@ -38,9 +38,65 @@
                     <i>Lorem ipsum dolor, sit amet<br> consectetur adipisicing elit.</i>
                 </div>
             </nav>
-            <br>
-            
+            <nav class="level">
+                <div class="level-item">
+                    <div class="spl-box">
+                        <div class="columns">
+                            <div class="column">
+                                <input type="text" class="input" placeholder="Receipient ID(s):">
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column is-half">
+                                <div class="card">
+                                    <div class="card-content has-text-centered">
+                                        FileName
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="card">
+                                    <div class="card-content has-text-centered">
+                                        FileName
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column is-half">
+                                <div class="card">
+                                    <div class="card-content has-text-centered">
+                                        FileName
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="column is-half">
+                                <div class="card">
+                                    <div class="card-content has-text-centered">
+                                        FileName
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="columns">
+                            <div class="column">
+                                <nav class="level">
+                                    <div class="level-left">
+                                        <div class="level-item"><button class="button is-primary">Add file</button></div>
+                                        <div class="level-item"><button class="button is-danger">Discard</button></div>
+                                    </div>
+                                    <div class="level-right">
+                                        <div class="level-item"><button class="button is-success">Send</button></div>
+                                    </div>
+                                </nav>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
+    </div>    
+    <script src="index.js"></script>
+    <script src="signout.js"></script>
 </body>
 </html>

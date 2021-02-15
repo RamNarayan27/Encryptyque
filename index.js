@@ -13,18 +13,17 @@ needed functions :
 //Imports
 const AWS = require("aws-sdk");
 const NodeRSA = require("node-rsa");
-const cred = require('data-store')({ path: process.cwd() + '\\creds.json' });
+const cred = require('data-store')({ path: process.cwd() + '/creds.json' });
 conf_name = cred.get('unique-username')
-const conf = require("data-store")({ path: process.cwd() + "\\" + conf_name + ".json" });
+const conf = require("data-store")({ path: process.cwd() + "/" + conf_name + ".json" });
 const rec_list = require("data-store")({
   path: process.cwd() + "\\friend_list.json",
 });
 const out_list = require("data-store")({
   path: process.cwd() + "\\outbox.json",
 });
-const inbox = require("data-store")({ path: process.cwd() + "\\inbox.json" });
+const inbox = require("data-store")({ path: process.cwd() + "/inbox.json" });
 const { parse, stringify } = require("flatted");
-const randomstring = require("randomstring");
 const crypto = require("crypto");
 const file_manager = require("fs");
 const Base64 = require("js-base64");
@@ -37,6 +36,7 @@ const server_public_key =
 const server_pubkey = NodeRSA(server_public_key, "pkcs8-public-pem");
 
 cred_details = cred.get("creds");
+console.log(cred_details);
 let prepData = Buffer.from(cred_details, "hex");
 let decryptedData = server_pubkey.decryptPublic(prepData);
 let formattedData = decryptedData.toString();

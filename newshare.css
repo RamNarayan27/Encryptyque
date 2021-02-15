@@ -1,17 +1,20 @@
 html {
-    background-image: url("background.png");
-    height: 100%;
-    background-position: center;
-    background-size: cover;
-    background-repeat: repeat;
+  background-image: url("background.png");
+  height: 100%;
+  background-position: center;
+  background-size: cover;
+  background-repeat: repeat;
 }
-.has-max-width{
-    max-width: 690px;
-}
-.dashed-box{
-    border-style: dashed;
-    border-width: 5px;
-    max-width: 690px;
-    height: 250px;
-    border-color: white;
+.spl-box {
+  width: 62.5rem;
+  height: auto;
+  border-color: white;
+  border-width: 1px;
+  border-style: solid;
+  border-radius: 7px;
+  margin-top: 40px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }

@@ -3783,7 +3783,7 @@ a.tag:hover {
 
 .card {
   background-color: #ffffff;
-  border-radius: 25px;
+  border-radius: 5px;
   box-shadow: 0 0.5em 1em -0.125em rgba(10, 10, 10, 0.1), 0 0px 0 1px rgba(10, 10, 10, 0.02);
   color: #4a4a4a;
   max-width: 100%;
@@ -3791,12 +3791,12 @@ a.tag:hover {
 }
 
 .card-footer:first-child, .card-content:first-child, .card-header:first-child {
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 .card-footer:last-child, .card-content:last-child, .card-header:last-child {
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .card-header {
@@ -3831,12 +3831,12 @@ a.tag:hover {
   position: relative;
 }
 .card-image:first-child img {
-  border-top-left-radius: 25px;
-  border-top-right-radius: 25px;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
 }
 .card-image:last-child img {
-  border-bottom-left-radius: 25px;
-  border-bottom-right-radius: 25px;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
 }
 
 .card-content {
