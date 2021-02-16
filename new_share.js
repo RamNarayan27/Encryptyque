@@ -79,7 +79,7 @@ autocomplete({
       rec_string.value += item.label;
   }
 });
-
+setStartUp();
 
 //Initial Runs and Variable Declarations
 if (!conf.has("unique-username")) console.log("Missing Unique Username");
@@ -369,5 +369,3 @@ function setStartUp(){
   finalString = `${quote} <br>~ ${author}`;
   quotes.innerHTML = finalString;
 }
-
-setStartUp();
