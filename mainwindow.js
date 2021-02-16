@@ -16,6 +16,7 @@ const AWS = require("aws-sdk");
 const notifier = require("node-notifier");
 const dataStore = require("data-store");
 const inbox = require("data-store")({ path: process.cwd() + "/inbox.json" });
+const fileDialog = require('file-dialog');
 
 function mypublickey() {
   return parse(conf.get("publickey"));
@@ -46,6 +47,17 @@ const userFullName = document.getElementById("user-fn");
 const userId = document.getElementById("user-id");
 const quotes = document.getElementById("quotes");
 const inbox_html = document.getElementById("inbox");
+
+function setProfilePicture() {
+  fileDialog().then((file) => {
+    fs.readFile(file[0].path, function (err, original_data) {
+      // This tells node to take that buffer, and write it to the new filename.
+      // Again no encoding is provided, so it will assume a Buffer or utf8 string.
+      fs.writeFile("img.jpg", original_data, function (err) {});
+    });
+    profilePicture.src = 'img.jpg';
+  });
+}
 
 function setStartUp() {
   userId.innerHTML = conf.get("unique-username");

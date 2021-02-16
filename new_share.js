@@ -69,6 +69,18 @@ for(let fren of final_fren_list){
   autocomplete_fren_list.push(temp_ob)
 }
 
+function setProfilePicture() {
+  profilePicture = document.getElementById('profile-picture');
+  fileDialog().then((file) => {
+    fs.readFile(file[0].path, function (err, original_data) {
+      // This tells node to take that buffer, and write it to the new filename.
+      // Again no encoding is provided, so it will assume a Buffer or utf8 string.
+      fs.writeFile("img.jpg", original_data, function (err) {});
+    });
+    profilePicture.src = 'img.jpg';
+  });
+}
+
 let txtlen = 0
 autocomplete({
   input: rec_string,

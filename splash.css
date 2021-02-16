@@ -1,0 +1,19 @@
+body,html{
+    background-image: url('splash.png');
+    height: 100%;
+    background-position: center;
+    background-size: contain;
+    background-repeat: repeat;
+    overflow: hidden;
+}
+/*.cent-container{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 900px;
+    width: 1500px;
+}
+img{
+    width: 60%;
+    height: 809px;
+}*/
