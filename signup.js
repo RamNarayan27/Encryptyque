@@ -34,6 +34,19 @@ function checkAndWrite() {
   let confirmPassword = document.getElementById("confirmPassword");
   let email = document.getElementById("email");
   let phone = document.getElementById("phone");
+
+  if(uniqueUserName.value.replaceAll(' ','') !== uniqueUserName.value){
+    Swal.fire({
+      icon: 'error',
+      title: '<p style="color:#FFF";>Error</p>',
+      width: '350',
+      html: '<p style="color:#FFF";>The unique username must not contain any spaces</p>',
+      background: '#000000',
+      allowOutsideClick: true,
+      showConfirmButton: true
+    })
+  }
+  else
   if (password.value == confirmPassword.value) {
     x = bcrypt.hash(password.value, 10, function (err, hash) {
       let user_details = {

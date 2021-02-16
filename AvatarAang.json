@@ -1,0 +1,8 @@
+{
+  "user-fullname": "Aang",
+  "unique-username": "AvatarAang",
+  "publickey": "[\"-----BEGIN PUBLIC KEY-----\\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBALVNAdya+ehNyfWOTtaH4hPkxXsFe60u\\nG0QumMwJ0dl1XmNFjBlAZAJHnscVrP0DcTFw8Gi4hxsT1zwj24M/kk8CAwEAAQ==\\n-----END PUBLIC KEY-----\"]",
+  "privatekey": "[\"-----BEGIN RSA PRIVATE KEY-----\\nMIIBOgIBAAJBALVNAdya+ehNyfWOTtaH4hPkxXsFe60uG0QumMwJ0dl1XmNFjBlA\\nZAJHnscVrP0DcTFw8Gi4hxsT1zwj24M/kk8CAwEAAQJAWyqVBBSeFBWBt8vOkwwT\\nQAOq1hjEvynPJjL0PK23a0xDt86gdJ08PJReRHnavXqxW9AqRShYOnz///y+Wa+i\\nWQIhAOHy3JPPAU72rka6PgGmz/gBCbr5NL3WVu7fvjajCCIDAiEAzWn3sUGKa0f7\\n6llrjNwPDLnZXH/Mw+DyPXgVtPvTIsUCIQCu0QrcyaLHh5CbZGmpOXla9uKiaUHn\\nRzkHpNE00LrwJQIgdPkLG91+vWjYg7M4E5ac21pZ9Nqx+Dl4uJhRhCaDLSECIGdP\\n7053YYi+cZIw02b0+Mqt4iQGR895/BrMOdRKIEGn\\n-----END RSA PRIVATE KEY-----\"]",
+  "key-status": "true",
+  "inbox-length": 0
+}

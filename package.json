@@ -25,6 +25,7 @@
     "@aws-sdk/client-dynamodb": "^3.4.1",
     "@fortawesome/fontawesome-free": "^5.15.2",
     "@mdi/font": "^5.9.55",
+    "autocompleter": "^6.1.0",
     "aws-sdk": "^2.839.0",
     "axios": "^0.21.1",
     "bcrypt": "^5.0.0",

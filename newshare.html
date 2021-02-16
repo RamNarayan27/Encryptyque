@@ -6,6 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="newshare.css">
     <link rel="stylesheet" href="newsharebulma.css">
+    
     <title>Encryptyque</title>
 </head>
 <body>
@@ -43,50 +44,21 @@
                     <div class="spl-box">
                         <div class="columns">
                             <div class="column">
-                                <input type="text" class="input" placeholder="Receipient ID(s):">
+                                <input type="text" class="input" id="recipient_list" placeholder="Receipient ID(s):">
                             </div>
                         </div>
-                        <div class="columns">
-                            <div class="column is-half">
-                                <div class="card">
-                                    <div class="card-content has-text-centered">
-                                        FileName
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column is-half">
-                                <div class="card">
-                                    <div class="card-content has-text-centered">
-                                        FileName
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="columns">
-                            <div class="column is-half">
-                                <div class="card">
-                                    <div class="card-content has-text-centered">
-                                        FileName
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="column is-half">
-                                <div class="card">
-                                    <div class="card-content has-text-centered">
-                                        FileName
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="columns is-multiline" id="filenames">
+                            
                         </div>
                         <div class="columns">
                             <div class="column">
                                 <nav class="level">
                                     <div class="level-left">
                                         <div class="level-item"><button class="button is-primary">Add file</button></div>
-                                        <div class="level-item"><button class="button is-danger">Discard</button></div>
+                                        <div class="level-item"><button class="button is-danger" onclick="discard_share()">Discard</button></div>
                                     </div>
                                     <div class="level-right">
-                                        <div class="level-item"><button class="button is-success">Send</button></div>
+                                        <div class="level-item"><button class="button is-success" onclick="send_button()">Send</button></div>
                                     </div>
                                 </nav>
                             </div>
@@ -96,7 +68,7 @@
             </div>
         </div>
     </div>    
-    <script src="index.js"></script>
+    <script src="new_share.js"></script>
     <script src="signout.js"></script>
 </body>
 </html>

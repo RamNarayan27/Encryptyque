@@ -15,6 +15,11 @@ function signmeout(){
           if(err) console.log('Failed to Delete Cred file')
         })
     }
+    if(fs.existsSync('./inbox.json')){
+        fs.unlink('./creds.json', (err) => {
+          if(err) console.log('Failed to Delete inbox file')
+        })
+    }
 
     data = {
         'userName':uniq_name

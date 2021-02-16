@@ -1600,6 +1600,11 @@
   "resolved" "https://registry.npmjs.org/atob/-/atob-2.1.2.tgz"
   "version" "2.1.2"
 
+"autocompleter@^6.1.0":
+  "integrity" "sha512-w+gPtAuwL+0BY33rwtFaliZ2TW/iJlbQ0AaFFi7sy7kh1MdOM5VpAMJ2s/6yygIkWkLQP8WF+ajlG39Ft8459Q=="
+  "resolved" "https://registry.npmjs.org/autocompleter/-/autocompleter-6.1.0.tgz"
+  "version" "6.1.0"
+
 "aws-sdk@^2.839.0":
   "integrity" "sha512-CFgiZ8IUpI1Qqs0ECheGO592lvGG6dYp7SsMJ5Xegd+aBAn6dimPTSmrnkPHPyzFhMYtBx1kE6SxVkl9MKOcWg=="
   "resolved" "https://registry.npmjs.org/aws-sdk/-/aws-sdk-2.839.0.tgz"

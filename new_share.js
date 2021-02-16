@@ -28,12 +28,14 @@ const { parse, stringify } = require("flatted");
 const crypto = require("crypto");
 const file_manager = require("fs");
 const fs = require('fs')
+const autocomplete = require('autocompleter');
 const Base64 = require("js-base64");
 const { callbackify } = require("util");
 const notifier = require("node-notifier");
 const Swal = require('sweetalert2')
 const path = require("path");
 const axios = require('axios')
+
 
 const server_public_key =
   "\n-----BEGIN PUBLIC KEY-----\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI/Ip/FSDW2ZQfUSfbrFJrVx95crrvUg\n5pi8GEZ5Z1Ahw3UwQlcqQqPlC0FKDcWSvDk1Md7wpk5/PpkxVH6AAK0CAwEAAQ==\n-----END PUBLIC KEY-----\n";
@@ -47,6 +49,37 @@ let finalData = parse(formattedData);
 
 accesskey = finalData.AccessKey.AccessKeyId;
 secretkey = finalData.AccessKey.SecretAccessKey;
+
+rec_string = document.getElementById('recipient_list')
+const fren_list = fs.readFileSync("friend_list.json");
+const fren_data = JSON.parse(fren_list);
+const final_fren_list = Object.keys(fren_data);
+autocomplete_fren_list = []
+for(let fren of final_fren_list){
+  temp_ob = {
+    label:fren
+  }
+  autocomplete_fren_list.push(temp_ob)
+}
+
+let txtlen = 0
+autocomplete({
+  input: rec_string,
+  fetch: function(text, update) {
+      text = text.toLowerCase().split(',')[text.toLowerCase().split(',').length -1].replaceAll(' ','');
+      //console.log(text)
+      txtlen = text.length
+      // you can also use AJAX requests instead of preloaded data
+      var suggestions = autocomplete_fren_list.filter(n => n.label.toLowerCase().startsWith(text))
+      //console.log('suggestion: ',suggestions)
+      update(suggestions);
+  },
+  onSelect: function(item) {
+      rec_string.value = rec_string.value.slice(0,0-txtlen)
+      rec_string.value += item.label;
+  }
+});
+
 
 //Initial Runs and Variable Declarations
 if (!conf.has("unique-username")) console.log("Missing Unique Username");
@@ -69,18 +102,6 @@ if (!file_manager.existsSync("./outbox")) {
   file_manager.mkdirSync("./outbox");
 }
 
-// A simple function to check the length of the inbox
-async function setinboxlength() {
-  try {
-    const inbox_data = file_manager.readFileSync("inbox.json");
-    const inbox_i = JSON.parse(inbox_data);
-    const len = Object.keys(inbox_i).length;
-    conf.set("inbox-length", len);
-  } catch (err) {
-    console.log("No file");
-    conf.set("inbox-length", 0);
-  }
-}
 
 // Simple functions that returns user Public Key and private key
 function mypublickey() {
@@ -298,6 +319,20 @@ async function send_file() {
   }
 }
 
+
+async function send_button() {
+  rec_data = rec_value.split(',')
+  for(let i=0;i<rec_data.length;i++)rec_data[i] = rec_data[i].replaceAll(' ','')
+
+
+  //console.log(rec_data)
+  //console.log(len)
+
+
+
+
+
+}
 // A simple function to download the selected share and decrypt it
 // ef - encodedfile
 // dc - decrypted

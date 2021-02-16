@@ -279,6 +279,9 @@ async function setinboxlength() {
     conf.set("inbox-length", len);
   } catch (err) {
     console.log("No file");
+    inbox.set('test','test')
+    inbox.del('test')
+    setinboxlength()
     conf.set("inbox-length", 0);
   }
 }
