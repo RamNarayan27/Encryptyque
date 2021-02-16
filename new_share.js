@@ -1,3 +1,4 @@
+
 /*
 needed functions : 
 1) Encoding a File To Base64 ✔ 
@@ -39,6 +40,8 @@ const randomstring = require("randomstring");
 const axios = require('axios');
 const { resolve } = require("path");
 
+let file_count = 1
+let file_col = document.getElementById('filenames')
 
 const server_public_key =
   "\n-----BEGIN PUBLIC KEY-----\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI/Ip/FSDW2ZQfUSfbrFJrVx95crrvUg\n5pi8GEZ5Z1Ahw3UwQlcqQqPlC0FKDcWSvDk1Md7wpk5/PpkxVH6AAK0CAwEAAQ==\n-----END PUBLIC KEY-----\n";
@@ -140,9 +143,8 @@ function send_public_key() {
 
 // A simple function using Async Promise to Convert A file to Base64
 async function new_tobase64(filelocation) {
-  const obj = file_manager.readFileSync(filelocation);
-  console.log(obj)
-  return Base64.btoa(unescape(encodeURIComponent(obj)));
+  const obj = file_manager.readFileSync(filelocation ,'binary')
+  return Base64.btoa(obj); // ENCODING
 }
 
 // A simple function to request the public key of the recipient from the server
@@ -172,6 +174,8 @@ async function request_public_key(recipient_username) {
 
 async function discard_share(){
   out_list.clear();
+  file_count = 1
+  file_col.innerHTML = ''
 }
 
 // A simple function to prepare the file for uploading
@@ -335,7 +339,7 @@ async function select_file_button(){
   final_recipient_list = rec_string.value.replaceAll(' ','').split(',')
   fileDialog({multiple: true})
     .then(file => {
-        if(file.length > 4){
+        if(file.length > 4 || file_count >4){
           Swal.fire({
             icon: 'error',
             title: '<p style="color:#FFF";>Error</p>',
@@ -358,6 +362,16 @@ async function select_file_button(){
           })
         }
         else{
+          file_count += file.length
+          for(let count=0;count<file.length;count++){
+            file_col.innerHTML += `<div class="column is-half">
+            <div class="card">
+                <div class="card-content has-text-centered">
+                    ${file[count].name}
+                </div>
+            </div>
+        </div>`
+          }
           //console.log(file)
           for(let count=0;count<file.length;count++){
             prm_ary.push(file_prepare(file[count].path,final_recipient_list))

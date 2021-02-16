@@ -189,19 +189,20 @@ async function download_file(downloadID) {
       decipher.write(encrypted_body);
       decipher.end();
       decrypted = decipher.read();
+      //bin = Buffer.from(decrypted,'binary')
       extn = ef_actual_name.split(".").pop();
 
-      var fin = decrypted.toString();
+      var fin = decrypted.toString('binary');
       //fin = fin.replaceAll(" ", "");
 
-      var binaryImg = decodeURIComponent(escape(Base64.atob(fin)));
+      var binaryImg = Base64.atob(fin) //DECODING
       var length = binaryImg.length;
       var ab = new ArrayBuffer(length);
       var ua = new Uint8Array(ab);
       for (var i = 0; i < length; i++) {
         ua[i] = binaryImg.charCodeAt(i);
       }
-      fs.writeFileSync(process.cwd() + "/inbox/" + ef_actual_name, binaryImg);
+      fs.writeFileSync(process.cwd() + "/inbox/" + ef_actual_name, ua);
       Swal.fire({
         icon: "success",
         title: '<p style="color:#FFF";>Downloaded Successfully</p>',
