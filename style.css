@@ -37,3 +37,6 @@ body,html{
     background-size: cover;
     background-repeat: repeat;
 }
+.min-width-box{
+    min-width: 425.4px;
+}
