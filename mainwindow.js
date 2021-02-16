@@ -201,7 +201,7 @@ async function download_file(downloadID) {
       for (var i = 0; i < length; i++) {
         ua[i] = binaryImg.charCodeAt(i);
       }*/
-      fs.writeFileSync(process.cwd() + "/inbox/" + ef_actual_name, ua);
+      fs.writeFileSync(process.cwd() + "/inbox/" + ef_actual_name, binaryImg);
       Swal.fire({
         icon: "success",
         title: '<p style="color:#FFF";>Downloaded Successfully</p>',
