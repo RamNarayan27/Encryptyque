@@ -72,12 +72,14 @@ function readAndValidate() {
 
       default:
         Swal.fire({
-          icon: "success",
-          title: '<p style="color:#FFF";>Success</p>',
+          icon: "info",
+          title: '<p style="color:#FFF";>Setting up</p>',
           width: "350",
           html:
             '<p style="color:#FFF";>Successfully logged in, Setting up your credentials</p>',
           background: "#000000",
+          showConfirmButton:false,
+          allowOutsideClick:false
         }).then((result) => {
           dataStore_creds.set("unique-username", userName.value);
           dataStore_creds.set("creds", data);
@@ -86,23 +88,63 @@ function readAndValidate() {
           });
 
           const cred_details = dataStore_creds.get("creds");
-          const  prepData = Buffer.from(cred_details, "hex");
+          const prepData = Buffer.from(cred_details, "hex");
           const decryptedData = server_pubkey.decryptPublic(prepData);
           const formattedData = decryptedData.toString();
           const finalData = parse(formattedData);
 
           userfullname = finalData["fullname"];
           dataStore_conf.set("user-fullname", userfullname);
-          dataStore_conf.set('unique-username',userName.value)
-          const key = new NodeRSA({ b: 512 });
+          dataStore_conf.set("unique-username", userName.value);
 
-          dataStore_conf.set("publickey", stringify(key.exportKey(["public"])));
-          dataStore_conf.set("privatekey", stringify(key.exportKey()));
-          dataStore_conf.set("key-status", "false");
+          if (!dataStore_conf.has("key-status")) {
+            const key = new NodeRSA({ b: 512 });
 
-          //redirect to mainwindow.html
-          window.location.href = "mainwindow.html";
-        });
+            pubk = stringify(key.exportKey(["public"]));
+
+            dataStore_conf.set("publickey", pubk);
+            dataStore_conf.set("privatekey", stringify(key.exportKey()));
+            dataStore_conf.set("key-status", "false");
+
+            const AWS = require("aws-sdk");
+            AWS.config.update({
+              region: "ap-south-1",
+              accessKeyId: finalData.AccessKey.AccessKeyId,
+              secretAccessKey: finalData.AccessKey.SecretAccessKey,
+            });
+            const docClient = new AWS.DynamoDB.DocumentClient();
+            const user_table = "user_publickey";
+            const params = {
+              TableName: user_table,
+              Item: {
+                username: userName.value,
+                publickey: pubk,
+              },
+            };
+            docClient.put(params, function (err, data) {
+              if (err) {
+                console.error("Failed To Add", err);
+              } else {
+                console.log("Successfully Added");
+                dataStore_conf.set("key-status", "true");
+              }
+            });
+          }
+          Swal.fire({
+            icon: "success",
+            title: '<p style="color:#FFF";>Logged in</p>',
+            width: "350",
+            html:
+              '<p style="color:#FFF";>Credentials set up!</p>',
+            background: "#000000",
+            showConfirmButton:true,
+            allowOutsideClick:true
+          }).then((result)=>{
+            if(result.isConfirmed){
+              window.location.href = "mainwindow.html";
+            }
+          })
+       });
         break;
     }
   });

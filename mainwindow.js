@@ -4,6 +4,9 @@ const Swal = require("sweetalert2");
 const axios = require("axios");
 const Base64 = require("js-base64");
 const cred = require("data-store")({ path: process.cwd() + "/creds.json" });
+const rec_list = require("data-store")({
+  path: process.cwd() + "\\friend_list.json",
+});
 conf_name = cred.get("unique-username");
 const crypto = require("crypto");
 const shell = require("electron").shell;
@@ -73,6 +76,9 @@ function setStartUp() {
   quote = quotesFile[author];
   finalString = `${quote} <br>~ ${author}`;
   quotes.innerHTML = finalString;
+  if (conf.get("key-status") !== "true") {
+    send_public_key()
+  }  
   refresh_check();
 }
 

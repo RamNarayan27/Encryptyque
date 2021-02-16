@@ -104,3 +104,4 @@ dist
 .tern-port
 creds.json
 FireLordZuko.json
+*.json

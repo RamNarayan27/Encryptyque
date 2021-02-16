@@ -16,10 +16,11 @@ function signmeout(){
         })
     }
     if(fs.existsSync('./inbox.json')){
-        fs.unlink('./creds.json', (err) => {
+        fs.unlink('./inbox.json', (err) => {
           if(err) console.log('Failed to Delete inbox file')
         })
     }
+
 
     data = {
         'userName':uniq_name

@@ -21,7 +21,7 @@ conf_name = cred.get('unique-username')
 const conf = require("data-store")({ path: process.cwd() + "/" + conf_name + ".json" });
 const rec_list = require("data-store")({
   path: process.cwd() + "\\friend_list.json",
-});
+});rec_list.set('test','');rec_list.del('test')
 const out_list = require("data-store")({
   path: process.cwd() + "\\outbox.json",
 });
@@ -110,9 +110,6 @@ AWS.config.update({
 });
 
 // A simple function to check if the private key + public key is generated
-if (conf.get("key-status") !== "true") {
-  send_public_key()
-}
 
 if (!file_manager.existsSync("./inbox")) {
   file_manager.mkdirSync("./inbox");
@@ -130,33 +127,10 @@ function myprivatekey() {
   return parse(conf.get("privatekey"));
 }
 
-// A simple function to send the public key to the Server
-function send_public_key() {
-  const docClient = new AWS.DynamoDB.DocumentClient();
-  const user_table = "user_publickey";
-  const params = {
-    TableName: user_table,
-    Item: {
-      username: conf.get("unique-username"),
-      publickey: mypublickey(),
-    },
-  };
-  console.log(params)
-
-  docClient.put(params, function (err, data) {
-    if (err) {
-      console.error("Failed To Add", err);
-    } else {
-      console.log("Successfully Added");
-      conf.set('key-status','true')
-    }
-  });
-}
-
 // A simple function using Async Promise to Convert A file to Base64
 async function new_tobase64(filelocation) {
   const obj = file_manager.readFileSync(filelocation ,'binary')
-  return Base64.btoa(obj); // ENCODING
+  return Base64.btoa(obj)
 }
 
 // A simple function to request the public key of the recipient from the server
@@ -173,7 +147,7 @@ async function request_public_key(recipient_username) {
     };
     docClient.get(param, function (err, data) {
       if (err) {
-        console.error("Unable to read item.");
+        console.log("Unable to read item.");
       } else {
         console.log(typeof data.Item.publickey);
         const newData = data.Item.publickey.replaceAll("\n", "\\n");
@@ -349,6 +323,8 @@ async function send_file() {
 
 async function select_file_button(){
   final_recipient_list = rec_string.value.replaceAll(' ','').split(',')
+  console.log(final_recipient_list)
+  for(let count = 0;count < final_recipient_list.length;count++)request_public_key(final_recipient_list[count])
   fileDialog({multiple: true})
     .then(file => {
         if(file.length > 4 || file_count >4){
