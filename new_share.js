@@ -452,6 +452,8 @@ async function send_button() {
     background: '#000000',
     allowOutsideClick: true,
     showConfirmButton: true
+  }).then((result) => {
+    discard_share()
   })
 
   //console.log(rec_data)
