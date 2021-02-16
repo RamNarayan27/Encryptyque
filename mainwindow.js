@@ -191,10 +191,10 @@ async function download_file(downloadID) {
       decrypted = decipher.read();
       extn = ef_actual_name.split(".").pop();
 
-      var fin = decrypted.toString();
-      fin = fin.replaceAll(" ", "");
+      var fin = decrypted.toString(hex);
+      //fin = fin.replaceAll(" ", "");
 
-      var binaryImg = Base64.decode(fin);
+      var binaryImg = fin.toString('Base64');
       /*var length = binaryImg.length;
       var ab = new ArrayBuffer(length);
       var ua = new Uint8Array(ab);

@@ -142,7 +142,7 @@ function send_public_key() {
 async function new_tobase64(filelocation) {
   const obj = file_manager.readFileSync(filelocation);
   console.log(obj)
-  return Base64.encodeURI(obj);
+  return Buffer.from(obj).toString("hex");
 }
 
 // A simple function to request the public key of the recipient from the server
