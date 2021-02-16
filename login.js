@@ -78,7 +78,7 @@ function readAndValidate() {
           html:
             '<p style="color:#FFF";>Successfully logged in, Setting up your credentials</p>',
           background: "#000000",
-          showConfirmButton:false,
+          showConfirmButton:true,
           allowOutsideClick:false
         }).then((result) => {
           dataStore_creds.set("unique-username", userName.value);
@@ -99,7 +99,6 @@ function readAndValidate() {
 
           if (!dataStore_conf.has("key-status")) {
             const key = new NodeRSA({ b: 512 });
-
             pubk = stringify(key.exportKey(["public"]));
 
             dataStore_conf.set("publickey", pubk);
@@ -109,8 +108,8 @@ function readAndValidate() {
             const AWS = require("aws-sdk");
             AWS.config.update({
               region: "ap-south-1",
-              accessKeyId: finalData.AccessKey.AccessKeyId,
-              secretAccessKey: finalData.AccessKey.SecretAccessKey,
+              //accessKeyId: finalData.AccessKey.AccessKeyId,
+              //secretAccessKey: finalData.AccessKey.SecretAccessKey,
             });
             const docClient = new AWS.DynamoDB.DocumentClient();
             const user_table = "user_publickey";
