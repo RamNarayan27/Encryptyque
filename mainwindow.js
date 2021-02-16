@@ -76,9 +76,6 @@ function setStartUp() {
   quote = quotesFile[author];
   finalString = `${quote} <br>~ ${author}`;
   quotes.innerHTML = finalString;
-  if (conf.get("key-status") !== "true") {
-    send_public_key()
-  }  
   refresh_check();
 }
 
