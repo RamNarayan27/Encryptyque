@@ -347,3 +347,27 @@ async function send_button() {
 //download_file('mnStwTMvv8Ka')
 //delete_file('mnStwTMvv8Ka')
 //setinboxlength()
+
+function setStartUp(){
+  const profilePicture = document.getElementById("profile-picture");
+  const userFullName = document.getElementById("user-fn");
+  const userId = document.getElementById("user-id");
+  const quotes = document.getElementById("quotes");
+  const inbox_html = document.getElementById("inbox");
+
+  userId.innerHTML = conf.get("unique-username");
+  userFullName.innerHTML = conf.get("user-fullname");
+  quotesFile = JSON.parse(fs.readFileSync("quotes.json"));
+  keylist = [];
+  Object.keys(quotesFile).forEach(function (key) {
+    keylist.push(key);
+  });
+
+  randint = Math.floor(Math.random() * 16);
+  author = keylist[randint];
+  quote = quotesFile[author];
+  finalString = `${quote} <br>~ ${author}`;
+  quotes.innerHTML = finalString;
+}
+
+setStartUp();
