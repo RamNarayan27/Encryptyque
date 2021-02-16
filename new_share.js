@@ -13,6 +13,7 @@ needed functions :
 //Imports
 const AWS = require("aws-sdk");
 const https = require('https')
+const fileDialog = require('file-dialog')
 const NodeRSA = require("node-rsa");
 const cred = require('data-store')({ path: process.cwd() + '/creds.json' });
 conf_name = cred.get('unique-username')
@@ -34,13 +35,16 @@ const { callbackify } = require("util");
 const notifier = require("node-notifier");
 const Swal = require('sweetalert2')
 const path = require("path");
-const axios = require('axios')
+const randomstring = require("randomstring");
+const axios = require('axios');
+const { resolve } = require("path");
 
 
 const server_public_key =
   "\n-----BEGIN PUBLIC KEY-----\nMFwwDQYJKoZIhvcNAQEBBQADSwAwSAJBAI/Ip/FSDW2ZQfUSfbrFJrVx95crrvUg\n5pi8GEZ5Z1Ahw3UwQlcqQqPlC0FKDcWSvDk1Md7wpk5/PpkxVH6AAK0CAwEAAQ==\n-----END PUBLIC KEY-----\n";
 const server_pubkey = NodeRSA(server_public_key, "pkcs8-public-pem");
 
+prm_ary = []
 cred_details = cred.get("creds");
 let prepData = Buffer.from(cred_details, "hex");
 let decryptedData = server_pubkey.decryptPublic(prepData);
@@ -135,9 +139,10 @@ function send_public_key() {
 }
 
 // A simple function using Async Promise to Convert A file to Base64
-async function new_toBase64(filelocation) {
+async function new_tobase64(filelocation) {
   const obj = file_manager.readFileSync(filelocation);
-  return Base64.btoa(obj);
+  console.log(obj)
+  return Base64.encodeURI(obj);
 }
 
 // A simple function to request the public key of the recipient from the server
@@ -171,8 +176,9 @@ async function discard_share(){
 
 // A simple function to prepare the file for uploading
 async function file_prepare(file, recipient_list) {
-  let promise = new Promise(function (resolve, reject) {
-    encoded_promise = new_toBase64(file);
+  console.log(file,recipient_list)
+  let prep_promise = new Promise(function (resolve, reject) {
+    encoded_promise = new_tobase64(file);
     encoded_promise
       .then(function (result) {
         key = crypto.pbkdf2Sync(
@@ -226,14 +232,19 @@ async function file_prepare(file, recipient_list) {
           result[0],
           function (err) {
             if (err) throw err;
-            else console.log("Sent to Outbox!");
+            else {
+              console.log("Sent to Outbox!");
+              resolve('Sent')
+            }
           }
         );
         return result;
       });
   });
+  return prep_promise
 }
 
+confirm_prm_array = []
 // A simple function to upload the file from the outbox and delete the contents in the outbox
 async function send_file() {
   //Contents of result : [cipher.read(),key,iv,file,fname]
@@ -313,25 +324,112 @@ async function send_file() {
       });
       if (isuploaded == true) {
         success("Uploaded");
-        console.log("test");
+        resolve(1)
       }
     });
+    confirm_prm_array.push(file_upload_promise)
   }
 }
 
+async function select_file_button(){
+  final_recipient_list = rec_string.value.replaceAll(' ','').split(',')
+  fileDialog({multiple: true})
+    .then(file => {
+        if(file.length > 4){
+          Swal.fire({
+            icon: 'error',
+            title: '<p style="color:#FFF";>Error</p>',
+            width: '350',
+            html: '<p style="color:#FFF";>Please Choose only upto 4 files</p>',
+            background: '#000000',
+            allowOutsideClick: true,
+            showConfirmButton: true
+          })
+        }
+        else if(final_recipient_list[0] == ""){
+          Swal.fire({
+            icon: 'error',
+            title: '<p style="color:#FFF";>Error</p>',
+            width: '350',
+            html: '<p style="color:#FFF";>Please Enter the recipient first</p>',
+            background: '#000000',
+            allowOutsideClick: true,
+            showConfirmButton: true
+          })
+        }
+        else{
+          //console.log(file)
+          for(let count=0;count<file.length;count++){
+            prm_ary.push(file_prepare(file[count].path,final_recipient_list))
+          }
+          console.log(prm_ary)
+        }
 
+    })
+}
 async function send_button() {
-  rec_data = rec_value.split(',')
-  for(let i=0;i<rec_data.length;i++)rec_data[i] = rec_data[i].replaceAll(' ','')
 
+  Swal.fire({
+    icon: 'info',
+    title: '<p style="color:#FFF";>Wait</p>',
+    width: '350',
+    html: '<p style="color:#FFF";>Please Wait while your files are being encrypted</p>',
+    background: '#000000',
+    allowOutsideClick: false,
+  })
+
+  all_encrypted = true
+  while(all_encrypted == true){
+    for(let i =0;i<prm_ary.length;i++){
+      if(prm_ary[i].PromiseState !== "fulfilled"){
+        all_encrypted = false
+      }
+    }
+  }
+  console.log(all_encrypted)
+  
+  Swal.fire({
+    icon: 'success',
+    title: '<p style="color:#FFF";>success</p>',
+    width: '350',
+    html: '<p style="color:#FFF";>Your Files are Successfully encrypted</p>',
+    background: '#000000',
+    allowOutsideClick: false,
+    showConfirmButton: true
+  }).then((result) =>{
+    if (result.isConfirmed) {
+      Swal.fire({
+        icon: 'info',
+        title: '<p style="color:#FFF";>Uploading</p>',
+        width: '350',
+        html: '<p style="color:#FFF";>Your Files Are Uploading and will be sent soon</p>',
+        background: '#000000',
+        allowOutsideClick: false,
+        showConfirmButton: true
+      })
+    }
+  })
+  send_file()
+  all_uploaded = true
+  while(all_uploaded == true){
+    for(let i =0;i<confirm_prm_array.length;i++){
+      if(confirm_prm_array[i].PromiseState !== "fulfilled"){
+        all_uploaded = false
+      }
+    }
+  }
+  Swal.fire({
+    icon: 'success',
+    title: '<p style="color:#FFF";>Successfully Uploaded</p>',
+    width: '350',
+    html: '<p style="color:#FFF";>Your Files have been uploaded</p>',
+    background: '#000000',
+    allowOutsideClick: true,
+    showConfirmButton: true
+  })
 
   //console.log(rec_data)
   //console.log(len)
-
-
-
-
-
 }
 // A simple function to download the selected share and decrypt it
 // ef - encodedfile

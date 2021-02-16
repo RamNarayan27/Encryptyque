@@ -1561,6 +1561,11 @@
   "resolved" "https://registry.npmjs.org/array-slice/-/array-slice-0.2.3.tgz"
   "version" "0.2.3"
 
+"array-uniq@1.0.2":
+  "integrity" "sha1-X8w3OSB3VyPP1k1lxkvvU7+eum0="
+  "resolved" "https://registry.npmjs.org/array-uniq/-/array-uniq-1.0.2.tgz"
+  "version" "1.0.2"
+
 "array-unique@^0.3.2":
   "integrity" "sha1-qJS3XUvE9s1nnvMkSp/Y9Gri1Cg="
   "resolved" "https://registry.npmjs.org/array-unique/-/array-unique-0.3.2.tgz"
@@ -2691,6 +2696,11 @@
   "version" "2.0.0"
   dependencies:
     "escape-string-regexp" "^1.0.5"
+
+"file-dialog@^0.0.8":
+  "integrity" "sha512-KnYitqNf/rANEhUxWzkINAaMVc7SshejwA5HEd5Wr8lEJQX1Js1LCndectS44SXTnXWK+jbHQYs4R6CaG+7Jkg=="
+  "resolved" "https://registry.npmjs.org/file-dialog/-/file-dialog-0.0.8.tgz"
+  "version" "0.0.8"
 
 "file-uri-to-path@1.0.0":
   "integrity" "sha512-0Zt+s3L7Vf1biwWZ29aARiVYLx7iMGnEUl9x33fbB/j3jR81u/O2LbqK+Bm1CDSNDKVtJ/YjwY7TUd5SkeLQLw=="
@@ -4638,6 +4648,13 @@
   "integrity" "sha1-sgmEkgO7Jd+CDadW50cAWHhSFiA="
   "resolved" "https://registry.npmjs.org/querystring/-/querystring-0.2.0.tgz"
   "version" "0.2.0"
+
+"randomstring@^1.1.5":
+  "integrity" "sha1-bfBij3XL1ZMpMNn+OrTpVqGFGMM="
+  "resolved" "https://registry.npmjs.org/randomstring/-/randomstring-1.1.5.tgz"
+  "version" "1.1.5"
+  dependencies:
+    "array-uniq" "1.0.2"
 
 "range-parser@~1.2.1":
   "integrity" "sha512-Hrgsx+orqoygnmhFbKaHE6c296J+HTAQXoxEF6gNupROmmGJRoyzfG3ccAveqCBrwr/2yxQ5BVd/GTl5agOwSg=="
