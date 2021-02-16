@@ -191,16 +191,16 @@ async function download_file(downloadID) {
       decrypted = decipher.read();
       extn = ef_actual_name.split(".").pop();
 
-      var fin = decrypted.toString('hex');
+      var fin = decrypted.toString();
       //fin = fin.replaceAll(" ", "");
 
-      var binaryImg = fin.toString('Base64');
-      /*var length = binaryImg.length;
+      var binaryImg = decodeURIComponent(escape(Base64.atob(fin)));
+      var length = binaryImg.length;
       var ab = new ArrayBuffer(length);
       var ua = new Uint8Array(ab);
       for (var i = 0; i < length; i++) {
         ua[i] = binaryImg.charCodeAt(i);
-      }*/
+      }
       fs.writeFileSync(process.cwd() + "/inbox/" + ef_actual_name, binaryImg);
       Swal.fire({
         icon: "success",
